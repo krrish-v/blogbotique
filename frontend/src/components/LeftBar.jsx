@@ -7,7 +7,7 @@ import { useAppContext } from "../contexts/AppContext"
 function LeftBar() {
     const [link, setLink] = useState("")
     const [loading, setLoading] = useState(false)
-    const { summary, setSummary, keywords, setKeywords } = useAppContext()
+    const { summary, setSummary, keywords, setKeywords, selectedKeywords, setTitles } = useAppContext()
 
     const GiveLink = async (event) => {
         event.preventDefault()
@@ -39,10 +39,40 @@ function LeftBar() {
         }
     }
 
+    const GenerateTitles = async (event) => {
+        event.preventDefault()
+        setLoading(true)
+        try {
+            const response = await fetch('http://127.0.0.1:8080/api/generateTitles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ summary, selectedKeywords })
+            })
+
+            if (response.ok) {
+                const Response = await response.json()
+                setTitles(Response.titles)
+                console.log(Response)
+            } else {
+                const errorResponse = await response.json()
+                console.error('Failed to get response')
+                alert(errorResponse.message)
+            }
+        } catch (error) {
+            console.error('Error:', error)
+            alert('Failed due to Bad Connection. Try Again')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="h-full w-[22.5%] bg-white rounded-r-3xl shadow-xl">
             <div className="px-10 pt-8 pb-2">
-                <h2 className="py-2 font-tommy font-semibold text-md tracking-wider">AI Magic</h2>
+                <h2 className="py-2 font-poppins font-semibold text-md tracking-wide">AI Magic</h2>
                 <p className="font-poppins text-[12px] tracking-wide">Let our AI understand your website and generate relevant blog titles for you</p>
             </div>
             <form method="post" className="px-10 " onSubmit={GiveLink}>
@@ -69,7 +99,7 @@ function LeftBar() {
                         <div className={summary ? "h-full flex flex-col justify-between items-center" : "hidden"}>
                             <Summary />
                             <Keywords keywords={keywords} />
-                            <button className=" mt-2 px-4 py-1 text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">
+                            <button onClick={GenerateTitles} className=" mt-2 px-4 py-1 text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">
                                 Generate Titles
                             </button>
                         </div>

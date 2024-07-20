@@ -12,7 +12,7 @@ const Summary = () => {
 
     return (
         <div className='py-5 relative h-svh max-h-32 w-full'>
-            <h2 className="py-1 font-tommy font-semibold text-md tracking-wider">Summary</h2>
+            <h2 className="py-1 font-poppins font-semibold text-md tracking-wide">Summary</h2>
             <textarea
                 value={summary}
                 onChange={handleChange}

@@ -29,7 +29,7 @@ const Keywords = ({ keywords }) => {
 
     return (
         <div className='relative mt-8 h-full w-full overflow-hidden'>
-            <h2 className="py-1 font-tommy font-semibold text-md tracking-wider">Keywords</h2>
+            <h2 className="py-1 font-poppins font-semibold text-md tracking-wide">Keywords</h2>
             <div className="flex flex-wrap gap-1 mt-2 max-h-20 overflow-y-auto scroll-container">
                 {keywords && keywords.length > 0 ? (
                     keywords.map((keyword, index) => (
