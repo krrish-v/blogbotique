@@ -34,23 +34,3 @@ class IndexManager:
         return self.query_engine.query(query_str)
 
 
-
-from web_crawler.crawl import Fetch, preprocessing
-from keyword_extracter import process
-
-url = "https://clinicsites.co/"
-text = Fetch().get(url)
-
-preprocessed_text = preprocessing().clean_text(text)
-
-# Extract keywords
-keywords = process().extract_keywords(preprocessed_text, num_keywords=10)
-
-with open("data.txt", "w") as wb:
-    wb.write(preprocessed_text)
-
-print(keywords)
-#index_manager = IndexManager("data.txt")
-#result = index_manager.query("focusedu")
-#print(result)
-
