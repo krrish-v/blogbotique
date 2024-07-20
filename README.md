@@ -5,6 +5,7 @@ Presonalized AI blog generation
 
 ```python
 from workflow import Backend
+import json
 
 # Create an instance of the Backend class
 backend = Backend()
