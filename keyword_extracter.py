@@ -1,0 +1,25 @@
+import nltk
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+import re
+from collections import Counter
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from llama_index.core import Document
+from llama_index.core.node_parser import SentenceSplitter
+
+class process:
+    def __init__(self):
+        self.stop_words = set(stopwords.words('english'))
+
+    def extract_keywords(self, text, num_keywords=5):
+        tokens = word_tokenize(text)
+        filtered_tokens = [word for word in tokens if word not in self.stop_words]
+        word_freq = Counter(filtered_tokens)
+        keywords = word_freq.most_common(num_keywords)
+        return keywords
+
+    
+
