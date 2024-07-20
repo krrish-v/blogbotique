@@ -41,7 +41,7 @@ function LeftBar() {
 
     return (
         <div className="h-full w-[22.5%] bg-white rounded-r-3xl shadow-xl">
-            <div className="px-10 pt-8 pb-4">
+            <div className="px-10 pt-8 pb-2">
                 <h2 className="py-2 font-tommy font-semibold text-md tracking-wider">AI Magic</h2>
                 <p className="font-poppins text-[12px] tracking-wide">Let our AI understand your website and generate relevant blog titles for you</p>
             </div>
@@ -58,25 +58,25 @@ function LeftBar() {
                         placeholder="https://www.blogs.ai/"
                         required
                     />
-                    <button type="submit" className="mt-4 px-4 py-1 w-14 text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">Go</button>
+                    <button type="submit" className="mt-2 px-3 py-[2px] text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">Go</button>
                 </div>
             </form>
-            <div className="flex flex-col justify-center items-center flex-grow py-1 px-10 space-y-5">
+            <div className=" flex flex-col justify-center items-center flex-grow px-10">
                 {loading ? (
                     <Loading />
                 ) : (
-                    <div className="h-1/2 w-full">
-                        <div className={summary ? " h-full flex flex-col justify-center items-center" : "hidden"}>
-                            <Summary text={summary} />
+                    <div className="h-1/2 w-full flex flex-col">
+                        <div className={summary ? "h-full flex flex-col justify-between items-center" : "hidden"}>
+                            <Summary />
                             <Keywords keywords={keywords} />
-                            <button className="h-1/5 mt-4 px-4 py-1 text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">
+                            <button className=" mt-2 px-4 py-1 text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">
                                 Generate Titles
                             </button>
                         </div>
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     )
 }
 

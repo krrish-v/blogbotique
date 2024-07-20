@@ -5,24 +5,41 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 const Keywords = ({ keywords }) => {
     const [newKeyword, setNewKeyword] = useState("")
+    const { selectedKeywords, setSelectedKeywords } = useAppContext()
     const { setKeywords } = useAppContext()
 
     const handleAddKeyword = () => {
         if (newKeyword.trim() !== "") {
-            setKeywords((prevKeywords) => [...prevKeywords, newKeyword.trim()])
+            const trimmedKeyword = newKeyword.trim()
+            setKeywords((prevKeywords) => [...prevKeywords, trimmedKeyword])
+            setSelectedKeywords((prevSelected) => [...prevSelected, trimmedKeyword])
             setNewKeyword("")
         }
     }
 
+    const toggleKeywordSelection = (keyword) => {
+        setSelectedKeywords((prevSelected) => {
+            if (prevSelected.includes(keyword)) {
+                return prevSelected.filter(k => k !== keyword)
+            } else {
+                return [...prevSelected, keyword]
+            }
+        })
+    }
+
     return (
-        <div className='relative h-2/5 w-full overflow-hidden'>
+        <div className='relative mt-8 h-full w-full overflow-hidden'>
             <h2 className="py-1 font-tommy font-semibold text-md tracking-wider">Keywords</h2>
-            <div className="flex flex-wrap gap-2 mt-2 max-h-24 overflow-y-auto scroll-container">
+            <div className="flex flex-wrap gap-1 mt-2 max-h-20 overflow-y-auto scroll-container">
                 {keywords && keywords.length > 0 ? (
                     keywords.map((keyword, index) => (
                         <button
                             key={index}
-                            className="text-black text-[14px] font-poppins px-4 py-1 rounded-xl border-2 hover:bg-custom-white hover:text-custom-gray transition duration-200"
+                            onClick={() => toggleKeywordSelection(keyword)}
+                            className={`text-black text-[12px] font-poppins px-4 py-1 rounded-xl border-2 transition duration-200 ${selectedKeywords.includes(keyword)
+                                ? 'border-custom-black bg-custom-gray text-white'
+                                : 'hover:bg-custom-white hover:text-custom-gray border-gray-300'
+                                }`}
                         >
                             {keyword}
                         </button>
@@ -51,4 +68,3 @@ const Keywords = ({ keywords }) => {
 }
 
 export default Keywords
-

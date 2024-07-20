@@ -1,13 +1,23 @@
 import React from 'react'
-import ReactMarkdown from 'react-markdown'
+import { useAppContext } from '../contexts/AppContext'
 
-const Summary = ({ text }) => {
+const Summary = () => {
+    const { summary, setSummary } = useAppContext()
+
+    const handleChange = (e) => {
+        const newText = e.target.value
+        setSummary(newText)
+        onTextChange(newText)
+    }
+
     return (
-        <div className=' py-5 relative h-2/5 w-full'>
+        <div className='py-5 relative h-svh max-h-32 w-full'>
             <h2 className="py-1 font-tommy font-semibold text-md tracking-wider">Summary</h2>
-            <ReactMarkdown className="whitespace-pre-wrap font-poppins text-[12px]">
-                {text}
-            </ReactMarkdown>
+            <textarea
+                value={summary}
+                onChange={handleChange}
+                className="whitespace-pre-wrap font-poppins text-[12px] w-full h-full max-h-24 border border-gray-300 rounded-lg p-2 resize-none focus:outline-none scroll-container"
+            />
         </div>
     )
 }

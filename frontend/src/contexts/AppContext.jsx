@@ -5,9 +5,10 @@ const AppContext = createContext()
 export const AppProvider = ({ children }) => {
     const [summary, setSummary] = useState("")
     const [keywords, setKeywords] = useState([])
+    const [selectedKeywords, setSelectedKeywords] = useState([])
 
     return (
-        <AppContext.Provider value={{ summary, setSummary, keywords, setKeywords }}>
+        <AppContext.Provider value={{ summary, setSummary, keywords, setKeywords, selectedKeywords, setSelectedKeywords }}>
             {children}
         </AppContext.Provider>
     )
