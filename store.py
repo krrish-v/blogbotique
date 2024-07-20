@@ -1,5 +1,4 @@
 
-
 from llama_index.core import SimpleDirectoryReader
 from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.vector_stores.milvus import MilvusVectorStore
@@ -32,5 +31,4 @@ class IndexManager:
 
     def query(self, query_str):
         return self.query_engine.query(query_str)
-
 
