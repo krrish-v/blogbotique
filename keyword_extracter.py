@@ -19,7 +19,5 @@ class process:
         filtered_tokens = [word for word in tokens if word not in self.stop_words]
         word_freq = Counter(filtered_tokens)
         keywords = word_freq.most_common(num_keywords)
-        return keywords
-
-    
-
+        only_keywords = [item[0] for item in keywords]
+        return only_keywords
