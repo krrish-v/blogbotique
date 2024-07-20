@@ -8,11 +8,10 @@ function BlogBoard() {
     const { blog, setBlog, html, setHtml, jsx, setJsx } = useAppContext()
     const [selectedContent, setSelectedContent] = useState('text')
     const [Content, setContent] = useState(blog)
+    const [isEditing, setIsEditing] = useState(false)
+    const [editContent, setEditContent] = useState('')
 
     const fetchContent = async (type) => {
-        let url = ''
-        let setter = null
-
         switch (type) {
             case 'text':
                 setContent(blog)
@@ -81,33 +80,6 @@ function BlogBoard() {
                 setContent(blog)
                 return
         }
-
-        if (url && setter) {
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ type })
-                })
-
-                if (response.ok) {
-                    const responseData = await response.json()
-                    console.log(responseData)
-                    setter(responseData.blog)
-                    setContent(responseData.blog)
-                } else {
-                    const errorResponse = await response.json()
-                    console.error('Failed to get response')
-                    alert(errorResponse.message)
-                }
-            } catch (error) {
-                console.error('Error:', error)
-                alert('Failed due to Bad Connection. Try Again')
-            }
-        }
     }
 
     useEffect(() => {
@@ -122,14 +94,67 @@ function BlogBoard() {
         setSelectedContent(type)
     }
 
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(Content)
+            .then(() => {
+                alert('Content copied to clipboard!')
+            })
+            .catch(err => {
+                console.error('Failed to copy:', err)
+                alert('Failed to copy content.')
+            })
+    }
+
+    const toggleEdit = () => {
+        if (isEditing) {
+            if (selectedContent === 'text') {
+                setBlog(editContent)
+            } else if (selectedContent === 'html') {
+                setHtml(editContent)
+            } else if (selectedContent === 'jsx') {
+                setJsx(editContent)
+            }
+            setContent(editContent)
+        }
+        setIsEditing(!isEditing)
+    }
+
+    const handleContentChange = (e) => {
+        setEditContent(e.target.value)
+    }
+
+    useEffect(() => {
+        setEditContent(Content)
+    }, [Content])
+
     return (
-        <div className="h-full w-3/5 overflow-x-hidden bg-white rounded-2xl drop-shadow-xl">
+        <div className="h-full w-3/5 overflow-x-hidden bg-white rounded-2xl drop-shadow-md">
             <h2 className="pt-8 px-10 font-poppins font-semibold text-lg tracking-wide">Generated Blog</h2>
             <div className="relative w-full h-16">
                 <SwitchOutput selectedContent={selectedContent} onSelect={handleSelect} />
+                <div className="absolute right-4 top-2 space-x-2">
+                    <button
+                        onClick={toggleEdit}
+                        className={`pl-4 py-2 rounded-md ${isEditing ? 'bg-cyan-700 text-custom-white' : 'bg-custom-white text-custom-gray'}  font-poppins font-semibold hover:bg-custom-gray hover:text-custom-white transition-colors `}
+                    >
+                        {isEditing ? 'Save' : 'Edit'}<li className="bx bx-pencil px-1 text-lg"></li>
+                    </button>
+                    <button
+                        onClick={copyToClipboard}
+                        className="  px-4 py-2 bg-custom-white text-custom-gray font-poppins font-semibold  rounded-md hover:bg-custom-gray hover:text-custom-white transition-colors"
+                    >
+                        Copy<i class="bx bx-copy-alt px-1 text-center"></i>
+                    </button>
+                </div>
             </div>
             <div className="py-5 h-auto w-full">
-                {selectedContent === 'text' ? (
+                {isEditing ? (
+                    <textarea
+                        value={editContent}
+                        onChange={handleContentChange}
+                        className="w-full h-96 p-4 border border-gray-300 rounded-lg"
+                    />
+                ) : selectedContent === 'text' ? (
                     <TypingEffect text={Content} />
                 ) : (
                     <CodeDisplay code={Content} />

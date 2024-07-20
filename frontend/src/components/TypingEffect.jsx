@@ -1,7 +1,6 @@
 
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import Loading from './loading'
 
 const TypingEffect = ({ text, speed = 20 }) => {
     const [displayText, setDisplayText] = React.useState('')

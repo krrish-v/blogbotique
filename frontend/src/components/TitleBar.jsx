@@ -92,7 +92,7 @@ function TitleBar() {
                                 className={`relative mt-2 px-4 py-1 text-custom-black rounded-xl border-2 border-gray-500 transition-colors ${generatedTitles.includes(title) ? 'bg-custom-gray text-white' : 'hover:bg-custom-gray hover:text-white'}`}
                             >
                                 {title}
-                                {generatedTitles.includes(title) ? <p className='absolute bottom-2 right-2 text-lg'>✓</p> : <li className="bx bx-pencil absolute bottom-2 right-2 text-lg"></li>}
+                                {generatedTitles.includes(title) ? <p className='absolute bottom-1 right-2 text-lg'><FontAwesomeIcon icon={faCheck} /></p> : <li className="bx bx-pencil absolute bottom-2 right-2 text-lg"></li>}
                             </button>
                             {selectedTitle === title && (
                                 <div className="relative mt-4 p-4 border-2 rounded-lg bg-white border-gray-500">
