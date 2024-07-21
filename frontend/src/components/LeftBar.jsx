@@ -25,7 +25,7 @@ function LeftBar() {
             if (response.ok) {
                 const Response = await response.json()
                 console.log(Response)
-                setSummary("Response.summary")
+                setSummary("ASG Eye Hospitals is a network of super specialty eye hospitals in India, providing a comprehensive range of services for Retina, Cataract, Cornea, LASIK, Oculoplasty, Glaucoma, IC Lens, Squint, and Pediatric ophthalmology treatments and surgeries.")
                 setKeywords(Response.keywords || [])
             } else {
                 const errorResponse = await response.json()
