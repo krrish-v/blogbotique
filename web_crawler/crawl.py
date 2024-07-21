@@ -5,9 +5,8 @@ import re
 
 
 
-class fetch:
-    def __init__(self, base_url) -> None:
-        self.base_url = base_url
+class Fetch:
+    def __init__(self) -> None:
         self.turn = 0
 
         self.headers = {
@@ -26,17 +25,18 @@ class fetch:
             return None
 
 
-    def parse_links_and_text(self, content, base_url):
+    def parse_links_and_text(self, content, url):
         try:
             soup = BeautifulSoup(content, "html.parser")
             text = soup.get_text(separator=' ')
-            sub_links = [urljoin(base_url, link.get('href')) for link in soup.find_all('a', href=True)]
+            sub_links = [urljoin(url, link.get('href')) for link in soup.find_all('a', href=True)]
             return text, sub_links
         except:
             return None, None
 
 
-    def get(self):
+    def get(self, base_url):
+        self.base_url = base_url
         visited_url = []
         html = self.fetch_page(self.base_url)
         if html is not None:
@@ -63,9 +63,16 @@ class fetch:
 
 
 class preprocessing:
+    
     def clean_text(self, text):
         # Remove newline characters, extra spaces, and tabs
         cleaned_text = re.sub(r'[\n\t]', ' ', text)
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text)  # Remove extra spaces
         cleaned_text = cleaned_text.strip()  # Remove leading and trailing spaces
+        cleaned_text = self.refined_text(cleaned_text)
         return cleaned_text
+    
+    def refined_text(self, text):
+        text = text.lower()  # Convert to lowercase
+        text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove non-alphanumeric characters
+        return text
