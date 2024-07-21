@@ -6,18 +6,20 @@ const TypingEffect = ({ text, speed = 20 }) => {
     const [displayText, setDisplayText] = React.useState('')
 
     React.useEffect(() => {
-        let index = 0
-        const timer = setInterval(() => {
-            setDisplayText(text.slice(0, index + 1))
-            index += 1
-            if (index >= text.length) clearInterval(timer)
-        }, speed)
+        if (text) {
+            let index = 0
+            const timer = setInterval(() => {
+                setDisplayText(text.slice(0, index + 1))
+                index += 1
+                if (index >= text.length) clearInterval(timer)
+            }, speed)
 
-        return () => clearInterval(timer)
+            return () => clearInterval(timer)
+        }
     }, [text, speed])
 
     return (
-        <div className='h-full w-3/5 overflow-y-auto px-10 py-10'>
+        <div className='h-full w-full overflow-y-auto px-10 pb-10  scroll-container'>
             <ReactMarkdown className="whitespace-pre-wrap typing-effect">
                 {displayText}
             </ReactMarkdown>

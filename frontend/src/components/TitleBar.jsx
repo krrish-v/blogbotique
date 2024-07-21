@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAppContext } from "../contexts/AppContext"
-import Loading from "./loading"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
@@ -10,6 +9,7 @@ function TitleBar() {
     const [selectedTitle, setSelectedTitle] = useState(null)
     const [titleText, setTitleText] = useState("")
     const [prompt, setPrompt] = useState("")
+    const [generatedTitles, setGeneratedTitles] = useState([])
 
     const SelectTitle = (title) => {
         setSelectedTitle(title === selectedTitle ? null : title)
@@ -22,6 +22,14 @@ function TitleBar() {
             setSelectedKeywords((prevSelected) => [...prevSelected, trimmedKeyword])
             setNewKeyword("")
         }
+    }
+
+    const CloseTitleWindow_mark = () => {
+        setSelectedTitle(null)
+        setGeneratedTitles((prevGeneratedTitles) => [...prevGeneratedTitles, selectedTitle])
+    }
+    const CloseTitleWindow = () => {
+        setSelectedTitle(null)
     }
 
     const GenerateBlog = async (event) => {
@@ -44,6 +52,7 @@ function TitleBar() {
             if (response.ok) {
                 const Response = await response.json()
                 setBlog(Response.blog)
+                CloseTitleWindow_mark()
             } else {
                 const errorResponse = await response.json()
                 console.error('Failed to get response')
@@ -71,8 +80,6 @@ function TitleBar() {
         setTitleText(newText)
     }
 
-    console.log(titleText)
-
     return (
         <div className="w-2/5 h-full py-8 px-8 overflow-y-auto">
             <h2 className="py-1 font-poppins font-semibold text-lg tracking-wide">Suggested Titles</h2>
@@ -82,13 +89,14 @@ function TitleBar() {
                         <div className="h-full flex flex-col justify-between items-center">
                             <button
                                 onClick={() => SelectTitle(title)}
-                                className=" relative mt-2 px-4 py-1 text-custom-black rounded-xl border-2 border-gray-500 hover:bg-custom-gray hover:text-white transition-colors"
+                                className={`relative mt-2 px-4 py-1 text-custom-black rounded-xl border-2 border-gray-500 transition-colors ${generatedTitles.includes(title) ? 'bg-custom-gray text-white' : 'hover:bg-custom-gray hover:text-white'}`}
                             >
                                 {title}
-                                <li className="bx bx-pencil absolute bottom-2 right-2 text-lg"></li>
+                                {generatedTitles.includes(title) ? <p className='absolute bottom-1 right-2 text-lg'><FontAwesomeIcon icon={faCheck} /></p> : <li className="bx bx-pencil absolute bottom-2 right-2 text-lg"></li>}
                             </button>
                             {selectedTitle === title && (
-                                <div className="mt-4 p-4 border-2 rounded-lg bg-white border-gray-500">
+                                <div className="relative mt-4 p-4 border-2 rounded-lg bg-white border-gray-500">
+                                    <button onClick={CloseTitleWindow} className='absolute top-1 right-2'>✗</button>
                                     <p className='font-poppins text-[12px]'>Title </p>
                                     <textarea
                                         value={title}

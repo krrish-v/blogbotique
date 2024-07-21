@@ -8,9 +8,11 @@ export const AppProvider = ({ children }) => {
     const [selectedKeywords, setSelectedKeywords] = useState([])
     const [titles, setTitles] = useState([])
     const [blog, setBlog] = useState("")
+    const [html, setHtml] = useState("")
+    const [jsx, setJsx] = useState("")
 
     return (
-        <AppContext.Provider value={{ summary, setSummary, keywords, setKeywords, selectedKeywords, setSelectedKeywords, titles, setTitles, blog, setBlog }}>
+        <AppContext.Provider value={{ summary, setSummary, keywords, setKeywords, selectedKeywords, setSelectedKeywords, titles, setTitles, blog, setBlog, html, setHtml, jsx, setJsx }}>
             {children}
         </AppContext.Provider>
     )
