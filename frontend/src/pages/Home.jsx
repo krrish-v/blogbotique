@@ -19,14 +19,14 @@ function Home() {
                     <button className=" font-poppins text-lg font-thin text-custom-gray">pricing</button>
                 </div>
                 <div className=" absolute right-10 space-x-2">
-                    <button className=" px-4 py-1 rounded-xl bg-white border-2 border-black text-custom-gray ">Login</button>
-                    <button className=" px-4 py-1 rounded-xl bg-custom-gray border-2 border-black text-white ">signup</button>
+                    <button className=" px-4 py-1 rounded-xl bg-white border-2 border-black text-custom-gray hover:scale-105 transition-transform">Login</button>
+                    <button className=" px-4 py-1 rounded-xl bg-custom-gray border-2 border-black text-white hover:scale-105 transition-transform">signup</button>
                 </div>
             </nav>
             <div className="relative p-10 flex flex-col justify-center items-center">
                 <h1 className="py-3 font-poppins font-extrabold text-5xl tracking-normal">Transform Your Workflow</h1>
                 <h5 className="py-3 font-poppins font-thin text-3xl tracking-normal">Create and Ship Blogs 10X Faster using AI</h5>
-                <button onClick={Dashboard} className="my-8 px-4 py-2 rounded-xl bg-custom-gray border-2 border-black text-white ">Get Started</button>
+                <button onClick={Dashboard} className="my-8 px-4 py-2 rounded-xl bg-custom-gray border-2 border-black text-white hover:scale-105 transition-transform">Get Started</button>
             </div>
             <div className="pb-20 w-full h-auto flex flex-col justify-center items-center">
                 <img src={Displayimg} alt="Scribbs.ai" className=" w-3/5 h-auto border-4 border-black rounded-3xl" />
@@ -41,7 +41,7 @@ function Home() {
                     <h1 className="font-poppins text-xl font-semibold">2. Choose your favourite LLM</h1>
                     <h1 className="font-poppins text-xl font-semibold">3. Generate and ship</h1>
                 </div>
-                <button onClick={Dashboard} className="my-8 px-4 py-2 rounded-xl bg-custom-gray border-2 border-black text-white ">Get Started</button>
+                <button onClick={Dashboard} className="my-8 px-4 py-2 rounded-xl bg-custom-gray border-2 border-black text-white hover:scale-105 transition-transform">Get Started</button>
             </div>
             <footer className="relative bg-black h-96 w-full flex flex-col justify-center items-center space-y-10">
                 <div className="h-2/3 flex flex-row justify-around w-full">
