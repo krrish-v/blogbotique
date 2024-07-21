@@ -6,7 +6,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons'
 function TitleBar() {
     const [newTag, setNewTag] = useState("")
     const [selectedTags, setSelectedTags] = useState([])
-    const { titles, tags, setTags, setBlog } = useAppContext()
+    const { titles, tags, setTags, setBlog, setJsx, setHtml } = useAppContext()
     const [selectedTitle, setSelectedTitle] = useState(null)
     const [titleText, setTitleText] = useState("")
     const [prompt, setPrompt] = useState("")
@@ -39,11 +39,11 @@ function TitleBar() {
         const body = {
             title: titleText,
             tags: selectedTags,
-            prompt: prompt
+            custom_prompt: prompt
         }
         event.preventDefault()
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/generateblog', {
+            const response = await fetch('https://nervous-zebra-54.telebit.io/api/generateblog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,11 +55,14 @@ function TitleBar() {
             if (response.ok) {
                 const Response = await response.json()
                 setBlog(Response.blog)
+                setHtml(null)
+                setJsx(null)
+                console.log(Response.blog)
                 CloseTitleWindow_mark()
             } else {
                 const errorResponse = await response.json()
-                console.error('Failed to get response')
-                alert(errorResponse.message);
+                console.error(errorResponse)
+                alert('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error);

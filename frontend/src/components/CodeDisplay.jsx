@@ -2,8 +2,8 @@ import React from 'react'
 
 const CodeDisplay = ({ code }) => {
     return (
-        <div className='px-10'>
-            <div className="px-10 h-full w-full overflow-y-auto p-4 bg-black text-white font-mono text-sm rounded-lg overflow-x-auto">
+        <div className='px-10 h-full w-full overflow-y-auto scroll-smooth scroll-container'>
+            <div className="h-full w-full p-4 overflow-auto bg-black text-white font-mono text-sm rounded-lg">
                 <pre className="whitespace-pre-wrap overflow-y-auto">
                     {code}
                 </pre>

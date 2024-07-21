@@ -13,7 +13,7 @@ function LeftBar() {
         event.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('http://127.0.0.1:8080/upload/url', {
+            const response = await fetch('https://nervous-zebra-54.telebit.io/upload/url', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -24,12 +24,13 @@ function LeftBar() {
 
             if (response.ok) {
                 const Response = await response.json()
-                setSummary(Response.summary);
+                console.log(Response)
+                setSummary("Response.summary")
                 setKeywords(Response.keywords || [])
             } else {
                 const errorResponse = await response.json()
-                console.error('Failed to get response')
-                alert(errorResponse.message)
+                console.error(errorResponse)
+                alert('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error)
@@ -43,7 +44,7 @@ function LeftBar() {
         event.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/generatetitles', {
+            const response = await fetch('https://nervous-zebra-54.telebit.io/api/generatetitles', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -58,8 +59,8 @@ function LeftBar() {
                 console.log(Response)
             } else {
                 const errorResponse = await response.json()
-                console.error('Failed to get response')
-                alert(errorResponse.message)
+                console.error(errorResponse)
+                alert('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error)

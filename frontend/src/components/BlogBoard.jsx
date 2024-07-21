@@ -7,7 +7,7 @@ import { useAppContext } from "../contexts/AppContext"
 
 function BlogBoard() {
     const { blog, setBlog, html, setHtml, jsx, setJsx, setHasTyped } = useAppContext()
-    const [prompt, setPrompt] = useState("")
+    const [custom_prompt, setPrompt] = useState("")
     const [selectedContent, setSelectedContent] = useState('text')
     const [Content, setContent] = useState(blog)
     const [isEditing, setIsEditing] = useState(false)
@@ -29,20 +29,22 @@ function BlogBoard() {
                 return
             case 'html':
                 if (!html) {
+                    setLoading(true)
                     try {
-                        const response = await fetch("http://127.0.0.1:8080/api/GenerateBlogHtml", {
+                        const response = await fetch("https://nervous-zebra-54.telebit.io/api/getcode", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
                             credentials: 'include',
-                            body: JSON.stringify({ type })
+                            body: JSON.stringify({ blog })
                         })
 
                         if (response.ok) {
                             const responseData = await response.json()
-                            setHtml(responseData.html)
-                            setContent(responseData.html)
+                            console.log(responseData)
+                            setHtml(responseData.code)
+                            setContent(html)
                         } else {
                             const errorResponse = await response.json()
                             console.error('Failed to get response')
@@ -51,6 +53,8 @@ function BlogBoard() {
                     } catch (error) {
                         console.error('Error:', error)
                         alert('Failed due to Bad Connection. Try Again')
+                    } finally {
+                        setLoading(false)
                     }
                 } else {
                     setContent(html)
@@ -59,20 +63,22 @@ function BlogBoard() {
 
             case 'jsx':
                 if (!jsx) {
+                    setLoading(true)
                     try {
-                        const response = await fetch("http://127.0.0.1:8080/api/GenerateBlogJsx", {
+                        const response = await fetch("https://nervous-zebra-54.telebit.io/api/getcode", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
                             credentials: 'include',
-                            body: JSON.stringify({ type })
+                            body: JSON.stringify({ blog })
                         })
 
                         if (response.ok) {
                             const responseData = await response.json()
-                            setJsx(responseData.jsx)
-                            setContent(responseData.jsx)
+                            console.log(responseData)
+                            setJsx(responseData.code)
+                            setContent(jsx)
                         } else {
                             const errorResponse = await response.json()
                             console.error('Failed to get response')
@@ -81,6 +87,8 @@ function BlogBoard() {
                     } catch (error) {
                         console.error('Error:', error)
                         alert('Failed due to Bad Connection. Try Again')
+                    } finally {
+                        setLoading(false)
                     }
                 } else {
                     setContent(jsx)
@@ -98,13 +106,13 @@ function BlogBoard() {
         setLoading(true)
         setBlog("")
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/GenerateBlog', {
+            const response = await fetch('https://nervous-zebra-54.telebit.io/api/enhanceblog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ blog, prompt })
+                body: JSON.stringify({ blog, custom_prompt })
             })
 
             if (response.ok) {
@@ -115,8 +123,8 @@ function BlogBoard() {
                 setHasTyped(false)
             } else {
                 const errorResponse = await response.json()
-                console.error('Failed to get response')
-                alert(errorResponse.message)
+                console.error(errorResponse.message)
+                alert('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error)
@@ -131,13 +139,13 @@ function BlogBoard() {
         setLoading(true)
         setBlog("")
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/Enchance', {
+            const response = await fetch('https://nervous-zebra-54.telebit.io/api/enhanceblog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ blog })
+                body: JSON.stringify({ blog, custom_prompt })
             })
 
             if (response.ok) {
@@ -148,8 +156,8 @@ function BlogBoard() {
                 setHasTyped(false)
             } else {
                 const errorResponse = await response.json()
-                console.error('Failed to get response')
-                alert(errorResponse.message)
+                console.error(errorResponse.message)
+                alert('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error)
@@ -229,7 +237,9 @@ function BlogBoard() {
                     ) : selectedContent === 'text' ? (
                         <TypingEffect text={Content} />
                     ) : (
-                        <CodeDisplay code={Content} />
+                        <div className="h-full w-full">
+                            <CodeDisplay code={Content} />
+                        </div>
                     )
                 )}
             </div>
@@ -243,10 +253,11 @@ function BlogBoard() {
                         type="text"
                         id="prompt"
                         name="prompt"
-                        value={prompt}
+                        value={custom_prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         placeholder="Enter a Prompt"
                         className=" appearance-none rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
                     />
                     <button
                         type="submit"
