@@ -1,20 +1,15 @@
-import NavBar from "./components/NavBar"
-import LeftBar from "./components/LeftBar"
-import MainPad from "./components/MainPad"
-import { AppProvider } from './contexts/AppContext'
+import { Routes, Route } from 'react-router-dom'
+import Dashboard from "./pages/Dashboard"
+import Home from './pages/Home'
+
 function App() {
 
   return (
     <>
-      <AppProvider>
-        <div className=" bg-custom-white h-screen w-screen">
-          <NavBar />
-          <div className="pt-2 h-[90%] w-full flex gap-6">
-            <LeftBar />
-            < MainPad />
-          </div>
-        </div>
-      </AppProvider>
+      <Routes >
+        <Route path="/" element={<Home />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
+      </Routes>
     </>
   )
 }
