@@ -1,0 +1,8 @@
+llama-index-vector-stores-milvus
+llama-index
+pymilvus>=2.4.2
+llama-index-embeddings-huggingface
+nltk
+request
+beautifulsoup4
+urllib
