@@ -63,6 +63,31 @@ def blog():
         return jsonify({'status': 'success', 'blog': response_text}), 200
     else:
         return jsonify({'status': 'error', 'message': 'Invalid JSON input'}), 400
+    
+@app.route('/api/Enchance', methods=['POST'])
+def Enchanceblog():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'success', 'message': 'CORS preflight request handled successfully'}), 200
+    response_text = ""
+    
+    if request.is_json:
+        data = request.json
+        print(data)
+        prompt = data.get('blog', '')
+    
+        response = client.chat.completions.create(
+            model="meta-llama/Llama-3-8b-chat-hf",
+            messages=[{"role": "user", "content": f"{prompt}"}],
+        )
+        
+        if response.choices:
+            response_text = response.choices[0].message.content
+        else:
+            response_text = "No response generated"
+        
+        return jsonify({'status': 'success', 'blog': response_text}), 200
+    else:
+        return jsonify({'status': 'error', 'message': 'Invalid JSON input'}), 400
 
 @app.route('/api/generateTitles', methods=['POST'])
 def Titles():
