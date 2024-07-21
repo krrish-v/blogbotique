@@ -12,7 +12,7 @@ CORS(app, supports_credentials=True, allow_headers="*", origins="*", methods=["O
 # client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
 client = Together(api_key="f8c8fa4fd70a01169d90a949a82246470d2d0e5620e80f026b4ea7453764598e")
 
-@app.route('/', methods=['POST'])
+@app.route('/upload/url', methods=['POST'])
 def index():
     if request.method == 'OPTIONS':
         return jsonify({'status': 'success', 'message': 'CORS preflight request handled successfully'}), 200
@@ -35,11 +35,23 @@ def index():
             
         array = ["AIML", "Launchpad", "Llama3", "BLog generation","image generation"]
         
+        print(array)
+        print(response_text)
+        
         return jsonify({'status': 'success', 'summary': response_text, 'keywords':array}), 200
     else:
         return jsonify({'status': 'error', 'message': 'Invalid JSON input'}), 400
-    
-@app.route('/api/GenerateBlog', methods=['POST'])
+
+@app.route('/api/generatetitles', methods=['POST'])
+def Titles():
+    data = request.json
+    print(data)
+    array = ["A Journey Through India's Regional Delicacies: From North to South","The Secret Spices of Indian Cuisine: What Makes Our Dishes Irresistible","Traditional Indian Festive Foods: A Culinary Celebration","Exploring the Rich History and Origins of Popular Indian Dishes","Health Benefits of Indian Spices and How We Incorporate Them in Our Menu","A Guide to Pairing Indian Foods with the Perfect Drinks","Behind the Scenes: A Day in the Life of Our Indian Restaurant Kitchen","A Journey Through India's Regional Delicacies: From North to South","The Secret Spices of Indian Cuisine: What Makes Our Dishes Irresistible","Traditional Indian Festive Foods: A Culinary Celebration","Exploring the Rich History and Origins of Popular Indian Dishes","Health Benefits of Indian Spices and How We Incorporate Them in Our Menu","A Guide to Pairing Indian Foods with the Perfect Drinks","Behind the Scenes: A Day in the Life of Our Indian Restaurant Kitchen"]
+
+    print(array)
+    return jsonify({'status': 'success','titles':array}), 200
+
+@app.route('/api/generateblog', methods=['POST'])
 def blog():
     if request.method == 'OPTIONS':
         return jsonify({'status': 'success', 'message': 'CORS preflight request handled successfully'}), 200
@@ -59,6 +71,8 @@ def blog():
             response_text = response.choices[0].message.content
         else:
             response_text = "No response generated"
+            
+        print(response_text)
         
         return jsonify({'status': 'success', 'blog': response_text}), 200
     else:
@@ -88,13 +102,6 @@ def Enchanceblog():
         return jsonify({'status': 'success', 'blog': response_text}), 200
     else:
         return jsonify({'status': 'error', 'message': 'Invalid JSON input'}), 400
-
-@app.route('/api/generateTitles', methods=['POST'])
-def Titles():
-    data = request.json
-    print(data)
-    array = ["A Journey Through India's Regional Delicacies: From North to South","The Secret Spices of Indian Cuisine: What Makes Our Dishes Irresistible","Traditional Indian Festive Foods: A Culinary Celebration","Exploring the Rich History and Origins of Popular Indian Dishes","Health Benefits of Indian Spices and How We Incorporate Them in Our Menu","A Guide to Pairing Indian Foods with the Perfect Drinks","Behind the Scenes: A Day in the Life of Our Indian Restaurant Kitchen","A Journey Through India's Regional Delicacies: From North to South","The Secret Spices of Indian Cuisine: What Makes Our Dishes Irresistible","Traditional Indian Festive Foods: A Culinary Celebration","Exploring the Rich History and Origins of Popular Indian Dishes","Health Benefits of Indian Spices and How We Incorporate Them in Our Menu","A Guide to Pairing Indian Foods with the Perfect Drinks","Behind the Scenes: A Day in the Life of Our Indian Restaurant Kitchen"]
-    return jsonify({'status': 'success','titles':array}), 200
 
 @app.route('/api/GenerateBlogHtml', methods=['POST'])
 def Html():

@@ -224,7 +224,7 @@ function BlogBoard() {
                         <textarea
                             value={editContent}
                             onChange={handleContentChange}
-                            className="w-full h-96 p-4 border border-gray-300 rounded-lg"
+                            className="w-full h-full p-4 border border-gray-300 rounded-lg"
                         />
                     ) : selectedContent === 'text' ? (
                         <TypingEffect text={Content} />
