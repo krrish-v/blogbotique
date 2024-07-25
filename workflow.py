@@ -27,20 +27,13 @@ class Backend:
 
         with open("data.txt", "w") as wb:
             wb.write(preprocessed_text)
-        
-        self.index = self.store_vector()
 
         return self.keywords
     
-    def store_vector(self):
-        try:
-            self.index_manager = IndexManager("data.txt")
-            return True
-        except: return False
 
     def retrive(self, title, index):
         
-        self.index_manager = index
+        self.index_manager = IndexManager("data.txt")
         result = self.index_manager.query(title)
         return result
     
@@ -100,10 +93,8 @@ class Backend:
     def get_keywords(self, url):
         self.keywords = self.extraction(url)
 
-        if self.index:
-            return json.dumps({"keywords": self.keywords})
-        else: return "Error in loading a provided URL"
-
+        return json.dumps({"keywords": self.keywords})
+    
     
     def get_blog(self, title, custom_prompt, keywords, index):
 
@@ -132,6 +123,7 @@ class Backend:
                 {"role": "user", "content": prompt},
             ],
             temperature=0.7,
+            repetition_penalty=1
         )
         
         # Extract the generated title
@@ -139,3 +131,62 @@ class Backend:
             generated_blog = response.choices[0].message.content
             return generated_blog
         else: return False
+
+    def enhance_blog(self, blog, custom_prompt):
+
+        system_message = "You are a Search Engine Optimization(SEO) expert and a professional blogger assistant. Your job is to enhance the already generated prompt"
+
+        prompt = f"""Enhance the prompt:
+        {custom_prompt}
+        --------------------------------
+        Blog:
+        {blog}
+        ---------------------------------
+        """
+
+        response = self.client.chat.completions.create(
+            model="meta-llama/Llama-3-8b-chat-hf",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.2,
+            repetition_penalty=1
+        )
+        
+        # Extract the generated title
+        if response:
+            generated_blog = response.choices[0].message.content
+            return generated_blog
+        else: return False
+
+    
+    def code_of_blog(self, blog):
+
+        system_message = "You are a software engineer having a technical skills of writing a beutiful HTML and CSS code. Your job is to create a HTML  and CSS code for the give blog"
+
+        prompt = f"""Wite a code in HTML and CSS code to design a beautiful webpage for a blog:
+        --------------------------------
+        Add the blog in a webpage:
+        {blog}
+        ---------------------------------
+        Provide only HTML and CSS code without any additional context or irrelevant text.
+        """
+
+        response = self.client.chat.completions.create(
+            model="meta-llama/Llama-3-8b-chat-hf",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.1,
+            repetition_penalty=1
+        )
+        
+        # Extract the generated title
+        if response:
+            generated_blog = response.choices[0].message.content
+            return generated_blog
+        else: return False
+
+    
