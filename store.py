@@ -1,4 +1,5 @@
 
+
 from llama_index.core import SimpleDirectoryReader
 from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.vector_stores.milvus import MilvusVectorStore
@@ -8,6 +9,11 @@ from llama_index.core import Settings
 
 class IndexManager:
     def __init__(self, data_file, vector_store_uri="./milvus_demo.db", vector_dim=768):
+        """
+        Vector DB
+        """
+        self.vector_store_uri = vector_store_uri
+        self.vector_dim = vector_dim
         self.documents = SimpleDirectoryReader(input_files=[data_file]).load_data()
 
         self.embedding_model = HuggingFaceEmbedding(model_name="jinaai/jina-embeddings-v2-base-en")
