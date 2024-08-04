@@ -206,7 +206,7 @@ function BlogBoard() {
 
     return (
         <div className="h-full w-3/5 px-2 overflow-x-hidden bg-white rounded-2xl drop-shadow-md">
-            <h2 className="pt-8 px-10 font-poppins font-semibold text-lg tracking-wide">Generated Blog</h2>
+            <h2 className="py-1 px-4 font-poppins font-semibold text-lg tracking-wide">Generated Blog</h2>
             <div className="relative w-full h-16">
                 <SwitchOutput selectedContent={selectedContent} onSelect={handleSelect} />
                 <div className="absolute right-4 top-2 space-x-2">

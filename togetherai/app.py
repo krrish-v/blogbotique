@@ -1,16 +1,28 @@
 import os
 from flask_cors import CORS
 from together import Together
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, request
+from functools import wraps
 
 app = Flask(__name__)
-
-CORS(app, supports_credentials=True, allow_headers="*", origins="*", methods=["OPTIONS", "POST"])
+SECRET_KEY = 'JbkDGvjaDBKJ'
+CORS(app, supports_credentials=True, allow_headers="*", origins="*", methods=["OPTIONS", "POST","GET"])
 
 # os.environ['TOGETHER_API_KEY'] = 'f8c8fa4fd70a01169d90a949a82246470d2d0e5620e80f026b4ea7453764598e'
 
 # client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
 client = Together(api_key="f8c8fa4fd70a01169d90a949a82246470d2d0e5620e80f026b4ea7453764598e")
+
+user_projects = {
+    'projects': [
+        {'id': 1, 'name': 'Project A', 'description': 'Description for project A', 'company':'CompanyA', 'status':'12:30pm'},
+        {'id': 2, 'name': 'Project B', 'description': 'Description for project B', 'company':'CompanyB', 'status':'12:30pm'},
+        {'id': 3, 'name': 'Project C', 'description': 'Description for project C', 'company':'CompanyC', 'status':'12:30pm'},
+        {'id': 4, 'name': 'Project D', 'description': 'Description for project D', 'company':'CompanyD', 'status':'12:30pm'},
+        {'id': 5, 'name': 'Project E', 'description': 'Description for project E', 'company':'CompanyE', 'status':'12:30pm'},
+        {'id': 6, 'name': 'Project F', 'description': 'Description for project F', 'company':'CompanyF', 'status':'12:30pm'},
+    ]
+}
 
 @app.route('/upload/url', methods=['POST'])
 def index():
@@ -133,6 +145,33 @@ def Jsx():
         </div>"""
     return jsonify({'status': 'success','jsx':jsx}), 200
 
+@app.route('/api/authenticatedata', methods=['POST'])
+def LoginInfo ():
+    
+    return jsonify({'status': 'success', 'phone':7164814671}), 200
+
+
+@app.route('/api/authenticateotp', methods=['POST'])
+def AuthenticateOTP():
+    data = request.json
+    receivedOTP = data.get('otp')
+    sentOTP = "1234"
+    print(data)
+    print(receivedOTP)
+    if( receivedOTP == sentOTP):
+        token = "jhbsjb@#*87239DUYb"
+        return jsonify({'status': 'success' ,'token': token}), 200
+
+    return jsonify({'status': 'error', 'message': 'Incorrect code'}), 400
+
+@app.route('/api/userprojects')
+def ReturnUserProjects():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'success', 'message': 'CORS preflight request handled successfully'}), 200
+    projects = user_projects['projects']
+    blogs = 12
+    return jsonify({'status': 'success', 'projects': projects, 'blogsnumber': blogs}), 200
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)
 

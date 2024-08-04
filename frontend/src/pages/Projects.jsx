@@ -1,0 +1,129 @@
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import NavBar from "../components/NavBar"
+import AddProject from "../components/AddProject"
+import Loading from "../components/loading"
+import { useAppContext } from "../contexts/AppContext"
+
+function ProjectsPage() {
+    const { projects, setProjects } = useAppContext()
+    const [NumOfProj, setNumOfProj] = useState(0)
+    const [NumOfBlogs, setNumOfBlogs] = useState(0)
+    const [fetchError, setFetchError] = useState(false)
+    const [showAddProject, setShowAddProject] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+
+    const handleHomeClick = () => {
+        navigate('/')
+    }
+
+    const handleAddProject = () => {
+        setShowAddProject(!showAddProject)
+    }
+
+    const buttons = [
+        { label: 'Home', onClick: handleHomeClick, className: "text-custom-gray font-poppins text-lg font-thin hover:text-sky-300 hover:drop-shadow-md shadow-sky-800 transition-all" },
+        { label: <box-icon name='plus' color="white" size="30px"></box-icon>, onClick: handleAddProject, className: " flex justify-center items-center bg-custom-gray h-8 w-8 font-poppins rounded-sm hover:scale-90 transition-transform" }
+    ]
+
+    const FetchProjects = async () => {
+        const token = localStorage.getItem('authToken')
+        setLoading(true)
+        try {
+            const response = await fetch('http://localhost:8080/api/userprojects', {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                },
+                credentials: 'include',
+            })
+            if (response.ok) {
+                const Response = await response.json()
+                setNumOfBlogs(Response.blogsnumber)
+                setNumOfProj(Response.projects.length)
+                setProjects(Response.projects)
+            } else {
+                console.error(Response.message)
+                setFetchError(true)
+            }
+        } catch (error) {
+            console.error('Error:', error)
+            setFetchError(true)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        FetchProjects()
+    }, [])
+
+    const toggleAddProject = () => {
+        setShowAddProject(!showAddProject)
+    }
+
+    const closeAddProject = () => {
+        setShowAddProject(false)
+    }
+
+    const OpenProject = () => {
+        navigate('/Dashboard')
+    }
+
+    if (fetchError) {
+        return (
+            <div className="relative h-screen w-screen overflow-hidden">
+                <NavBar buttons={buttons} />
+                <div>
+                    <div className="flex justify-center items-center h-full w-full">
+                        <h1 className="pl-10 md:pl-28 px-10 font-poppins font-normal text-2xl tracking-wide">
+                            Failed to Fetch your Projects! Please Try Again
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="h-screen w-full">
+            <NavBar buttons={buttons} />
+            {showAddProject && <AddProject closeAddProject={closeAddProject} />}
+            {loading ? (
+                <div className="w-full h-auto flex flex-col justify-center overflow-hidden">
+                    <Loading />
+                </div>
+            ) : (
+                <>
+                    <div className="mt-20 w-full h-2/6 flex flex-col justify-center space-y-4">
+                        <h1 className=" pl-10 md:pl-28 px-10 font-poppins font-normal text-2xl tracking-wide">Total Projects : {NumOfProj}</h1>
+                        <h1 className=" pl-10 md:pl-28 px-10 font-poppins font-normal text-2xl tracking-wide">Total saved blogs : {NumOfBlogs}</h1>
+                    </div>
+                    <div className="px-10 md:px-28 w-full h-auto py-10 space-y-8 flex flex-wrap">
+                        {projects.length > 0 ? (
+                            projects.map((project) => (
+                                <button onClick={OpenProject}
+                                    key={project.id}
+                                    className="relative h-20 md:h-28 w-full border-2 border-custom-black rounded-xl flex flex-col justify-center hover:scale-95 transition-transform">
+                                    <h1 className=" px-6 font-poppins font-semibold text-2xl tracking-wide">{project.name}</h1>
+                                    <p className=" px-6 font-poppins font-thin text-md tracking-wide">{project.company}</p>
+                                    <p className=" absolute bottom-3 right-4 px-6 font-poppins font-thin text-sm tracking-wide">Last Worked at yesterday {project.status}</p>
+                                </button>
+                            ))
+                        ) : (
+                            <div className="w-full flex flex-col justify-center items-center">
+                                <h1 className="font-poppins font-normal text-2xl tracking-wide">
+                                    Create Your First Project!
+                                </h1>
+                                <button onClick={toggleAddProject} className="mt-10 flex justify-center items-center bg-custom-gray h-28 w-28 font-poppins rounded-lg hover:scale-75 transition-transform"><box-icon name='plus' color="white" size="92px"></box-icon></button>
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
+        </div >
+    )
+}
+
+export default ProjectsPage
