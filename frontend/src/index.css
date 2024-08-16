@@ -52,3 +52,7 @@
 .scroll-container::-webkit-scrollbar {
   display: none;
 }
+
+input[type="file"].hidden {
+  display: none;
+}

@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import LogIn from './pages/Login'
 import SignUp from './pages/SignUp'
 import ProjectsPage from './pages/Projects'
+import MyBlogs from './pages/MyBlogs'
 import Welcome from './pages/Welcome'
 import { AuthProvider } from './contexts/AuthContext'
 import { AppProvider } from './contexts/AppContext'
@@ -20,6 +21,7 @@ function App() {
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/Welcome" element={<Welcome />} />
             <Route path="/MyProjects" element={<ProjectsPage />} />
+            <Route path="/MyBlogs" element={<MyBlogs />} />
           </Routes>
         </AuthProvider>
       </AppProvider >

@@ -21,7 +21,7 @@ const Dropdown = () => {
         setTimeout(() => {
             logout()
             navigate('/Login')
-        }, 300);
+        }, 300)
         setIsOpen(false)
     }
 
@@ -72,7 +72,7 @@ const Dropdown = () => {
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                             role="menuitem"
                         >
-                            Log Out
+                            Log Out <label htmlFor="Logout" className='absolute right-4'><box-icon name='log-out-circle' color="gray" ></box-icon></label>
                         </button>
                     </div>
                 </div>

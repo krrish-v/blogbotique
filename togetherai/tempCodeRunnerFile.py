@@ -1,1 +1,1 @@
-blogsnumber
+projectblogs

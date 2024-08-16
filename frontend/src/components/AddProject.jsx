@@ -1,12 +1,20 @@
 import { useState } from "react"
 import { useAppContext } from "../contexts/AppContext"
 import Loading from "../components/loading"
+import Popup from "./PopUp"
 
 function AddProject({ closeAddProject }) {
     const { setProjects, setNumOfProj, setNumOfBlogs } = useAppContext()
     const [projectName, setProjectName] = useState("")
     const [company, setCompany] = useState("")
     const [loading, setLoading] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
+    const [popupMessage, setPopupMessage] = useState('')
+
+    const triggerPopup = (message) => {
+        setPopupMessage(message)
+        setShowPopup(true)
+    }
 
     const addtoMyproj = async (event) => {
         event.preventDefault()
@@ -29,11 +37,11 @@ function AddProject({ closeAddProject }) {
                 closeAddProject()
             } else {
                 console.error(Response.message)
-                alert("Failed to add the project! Please try again")
+                triggerPopup("Failed to add the project! Please try again")
             }
         } catch (error) {
             console.error('Error:', error)
-            alert("Failed to add the project due to bad Connection!")
+            triggerPopup("Failed to add the project due to bad Connection!")
         } finally {
             setLoading(false)
         }
@@ -41,6 +49,7 @@ function AddProject({ closeAddProject }) {
 
     return (
         <div className="fixed my-4 py-10 px-5 md:p-20 right-0 top-14 z-10 w-1/3 h-[87%] bg-white border-2 border-custom-gray rounded-l-3xl ">
+            <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
             <h1 className=" font-poppins text-3xl font-bold text-center">Add Project</h1>
             <button onClick={closeAddProject} className="absolute top-3 right-3">✗</button>
             {loading ? (

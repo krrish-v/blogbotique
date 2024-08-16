@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAppContext } from "../contexts/AppContext"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import Popup from './PopUp'
 
 function TitleBar() {
     const [newTag, setNewTag] = useState("")
@@ -11,10 +12,19 @@ function TitleBar() {
     const [titleText, setTitleText] = useState("")
     const [prompt, setPrompt] = useState("")
     const [generatedTitles, setGeneratedTitles] = useState([])
+    const [showPopup, setShowPopup] = useState(false)
+    const [popupMessage, setPopupMessage] = useState('')
+
+    const triggerPopup = (message) => {
+        setPopupMessage(message)
+        setShowPopup(true)
+    }
 
     const SelectTitle = (title) => {
-        setTitleText(title)
-        setSelectedTitle(title === selectedTitle ? null : title)
+        if (!generatedTitles.includes(title)) {
+            setTitleText(title)
+            setSelectedTitle(title === selectedTitle ? null : title)
+        }
     }
 
     const handleAddTags = () => {
@@ -43,7 +53,7 @@ function TitleBar() {
         }
         event.preventDefault()
         try {
-            const response = await fetch('https://nervous-zebra-54.telebit.io/api/generateblog', {
+            const response = await fetch('http://127.0.0.1:8080/api/generateblog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -54,7 +64,10 @@ function TitleBar() {
 
             if (response.ok) {
                 const Response = await response.json()
-                setBlog(Response.blog)
+                setBlog(prevState => ({
+                    ...prevState,
+                    blog: Response.blog
+                }))
                 setHtml(null)
                 setJsx(null)
                 console.log(Response.blog)
@@ -62,11 +75,11 @@ function TitleBar() {
             } else {
                 const errorResponse = await response.json()
                 console.error(errorResponse)
-                alert('Failed to get response')
+                triggerPopup('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed due to Bad Connection. Try Again')
+            triggerPopup('Failed due to Bad Connection. Try Again')
         }
     }
 
@@ -87,6 +100,7 @@ function TitleBar() {
 
     return (
         <div className="w-2/5 h-full py-8 px-8 overflow-y-auto">
+            <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
             <h2 className="py-1 font-poppins font-semibold text-lg tracking-wide">Suggested Titles</h2>
             {titles && titles.length > 0 ? (
                 titles.map((title, index) => (
@@ -109,7 +123,8 @@ function TitleBar() {
                                         className="whitespace-pre-wrap font-poppins text-[12px] w-full h-full max-h-24 border border-gray-300 rounded-lg p-2 resize-none focus:outline-none scroll-container"
                                     />
                                     <div className="mb-2">
-                                        <p className='font-poppins text-[12px]'>Related Tags:</p>
+                                        <p className='font-poppins text-[12px]'>Add keywords</p>
+                                        <p className="mt-2 font-poppins text-[12px] tracking-wide"><strong>Keywords</strong> are the specific words or phrases people might search for online. They are used within your blog content to improve SEO</p>
                                         <div className="flex flex-wrap gap-1 mt-2 max-h-20 overflow-y-auto scroll-container">
                                             {Array.isArray(tags) && tags.length > 0 ? (
                                                 tags.map((tag, index) => (
@@ -154,10 +169,8 @@ function TitleBar() {
                                         placeholder="Type your custom prompt here..."
                                         className="w-full p-2 border border-gray-300 rounded-lg"
                                     />
-                                    <p className='p-2 font-poppins text-[12px]'>Model</p>
-                                    <div className=' w-full space-x-2 flex'>
-                                        <button className=' w-1/2 px-2 py-1 rounded-xl font-poppins text-custom-black text-sm border hover:bg-custom-white hover:text-custom-gray border-gray-300'>Llama 3 8B</button>
-                                        <button onClick={GenerateBlog} className=' w-1/2 px-2 py-1 rounded-xl font-poppins text-custom-white bg-custom-black text-sm hover:bg-slate-700 hover:text-custom-white border-gray-300'>Generate</button>
+                                    <div className='mt-6 w-full flex justify-center'>
+                                        <button onClick={GenerateBlog} className=' w-1/2 px-2 py-2 rounded-xl font-poppins text-custom-white bg-custom-black text-sm hover:bg-slate-700 hover:text-custom-white border-gray-300'>Generate</button>
                                     </div>
                                 </div>
                             )}

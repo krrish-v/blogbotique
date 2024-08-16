@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../contexts/AuthContext"
 import Loading from "../components/loading"
+import Popup from "../components/PopUp"
 
 function SignUp() {
     const { login } = useAuthContext()
@@ -14,6 +15,13 @@ function SignUp() {
     const [otpScreen, setOtpScreen] = useState(false)
     const [otp, setOtp] = useState(["", "", "", ""])
     const navigate = useNavigate()
+    const [showPopup, setShowPopup] = useState(false)
+    const [popupMessage, setPopupMessage] = useState('')
+
+    const triggerPopup = (message) => {
+        setPopupMessage(message)
+        setShowPopup(true)
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -56,11 +64,11 @@ function SignUp() {
                 setOtpScreen(true)
                 console.log('Authentication successful:', response)
             } else {
-                alert("Failed to Signup. Please try again!")
+                triggerPopup("Failed to Signup. Please try again!")
                 console.error('Authentication failed:', response.message)
             }
         } catch (error) {
-            alert("Failed to Signup. Please try again!")
+            triggerPopup("Failed to Signup. Please try again!")
             console.error('Error during authentication:', error)
         } finally {
             setLoading(false)
@@ -87,8 +95,8 @@ function SignUp() {
                 setLoading(false)
                 navigate('/Welcome')
             } else {
-                console.error('Authentication failed:', Response.message)
-                alert(Response.message)
+                triggerPopup('Authentication failed:', Response.message)
+                console.error(Response.message)
             }
         } catch (error) {
             console.error('Error during authentication:', error)
@@ -111,10 +119,10 @@ function SignUp() {
                 const result = await response.json()
                 console.log('Authentication successful:', result)
             } else {
-                console.error('Authentication failed:', response.message)
+                triggerPopup('Failed to resend OTP,', response.message)
             }
         } catch (error) {
-            console.error('Error during authentication:', error)
+            console.error('Failed during requesting, ', error)
         }
     }
 
@@ -124,6 +132,7 @@ function SignUp() {
 
     return (
         <div className="h-screen w-screen grid grid-cols-1 md:grid-cols-2 bg-custom-white">
+            <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
             <div className="relative h-screen w-full flex justify-center items-center bg-custom-black">
                 <h1 className="text-white font-poppins text-3xl font-bold">Create blogs like never before.</h1>
                 <h1 className="absolute bottom-8 right-10 text-white font-poppins text-2xl font-bold">Scribbs.ai</h1>

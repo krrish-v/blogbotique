@@ -3,29 +3,41 @@ import TypingEffect from "./TypingEffect"
 import SwitchOutput from "./TypeSwitch"
 import CodeDisplay from "./CodeDisplay"
 import Loading from "./loading"
+import Popup from "./PopUp"
 import { useAppContext } from "../contexts/AppContext"
 
 function BlogBoard() {
     const { blog, setBlog, html, setHtml, jsx, setJsx, setHasTyped } = useAppContext()
     const [custom_prompt, setPrompt] = useState("")
     const [selectedContent, setSelectedContent] = useState('text')
-    const [Content, setContent] = useState(blog)
+    const [Content, setContent] = useState(blog.blog)
     const [isEditing, setIsEditing] = useState(false)
     const [editContent, setEditContent] = useState('')
     const [loading, setLoading] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
+    const [popupMessage, setPopupMessage] = useState('')
 
     useEffect(() => {
-        if (selectedContent === 'text') {
-            setContent(blog)
-        } else {
-            fetchContent(selectedContent)
+        const updateContent = () => {
+            if (selectedContent === 'text') {
+                setContent(blog.blog)
+            } else {
+                fetchContent(selectedContent)
+            }
         }
+        updateContent()
     }, [selectedContent, blog, html, jsx])
+
+
+    const triggerPopup = (message) => {
+        setPopupMessage(message)
+        setShowPopup(true)
+    }
 
     const fetchContent = async (type) => {
         switch (type) {
             case 'text':
-                setContent(blog)
+                setContent(blog.blog)
                 return
             case 'html':
                 if (!html) {
@@ -44,15 +56,15 @@ function BlogBoard() {
                             const responseData = await response.json()
                             console.log(responseData)
                             setHtml(responseData.code)
-                            setContent(html)
+                            setContent(responseData.code)
                         } else {
                             const errorResponse = await response.json()
                             console.error('Failed to get response')
-                            alert(errorResponse.message)
+                            triggerPopup(errorResponse.message)
                         }
                     } catch (error) {
                         console.error('Error:', error)
-                        alert('Failed due to Bad Connection. Try Again')
+                        triggerPopup('Failed due to Bad Connection. Try Again')
                     } finally {
                         setLoading(false)
                     }
@@ -78,15 +90,15 @@ function BlogBoard() {
                             const responseData = await response.json()
                             console.log(responseData)
                             setJsx(responseData.code)
-                            setContent(jsx)
+                            setContent(responseData.code)
                         } else {
                             const errorResponse = await response.json()
                             console.error('Failed to get response')
-                            alert(errorResponse.message)
+                            triggerPopup(errorResponse.message)
                         }
                     } catch (error) {
                         console.error('Error:', error)
-                        alert('Failed due to Bad Connection. Try Again')
+                        triggerPopup('Failed due to Bad Connection. Try Again')
                     } finally {
                         setLoading(false)
                     }
@@ -96,7 +108,7 @@ function BlogBoard() {
                 }
                 break
             default:
-                setContent(blog)
+                setContent(blog.blog)
                 return
         }
     }
@@ -104,7 +116,6 @@ function BlogBoard() {
     const GivePrompt = async (event) => {
         event.preventDefault()
         setLoading(true)
-        setBlog("")
         try {
             const response = await fetch('https://nervous-zebra-54.telebit.io/api/enhanceblog', {
                 method: 'POST',
@@ -118,17 +129,20 @@ function BlogBoard() {
             if (response.ok) {
                 const Response = await response.json()
                 console.log(Response)
-                setBlog(Response.blog)
+                setBlog(prevState => ({
+                    ...prevState,
+                    blog: Response.blog
+                }))
                 setContent(blog)
                 setHasTyped(false)
             } else {
                 const errorResponse = await response.json()
                 console.error(errorResponse.message)
-                alert('Failed to get response')
+                triggerPopup('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error)
-            alert('Failed due to Bad Connection. Try Again')
+            triggerPopup('Failed due to Bad Connection. Try Again')
         } finally {
             setLoading(false)
         }
@@ -137,7 +151,6 @@ function BlogBoard() {
     const Enchance = async (event) => {
         event.preventDefault()
         setLoading(true)
-        setBlog("")
         try {
             const response = await fetch('https://nervous-zebra-54.telebit.io/api/enhanceblog', {
                 method: 'POST',
@@ -151,17 +164,20 @@ function BlogBoard() {
             if (response.ok) {
                 const Response = await response.json()
                 console.log(Response)
-                setBlog(Response.blog)
+                setBlog(prevState => ({
+                    ...prevState,
+                    blog: Response.blog
+                }))
                 setContent(blog)
                 setHasTyped(false)
             } else {
                 const errorResponse = await response.json()
                 console.error(errorResponse.message)
-                alert('Failed to get response')
+                triggerPopup('Failed to get response')
             }
         } catch (error) {
             console.error('Error:', error)
-            alert('Failed due to Bad Connection. Try Again')
+            triggerPopup('Failed due to Bad Connection. Try Again')
         } finally {
             setLoading(false)
         }
@@ -182,16 +198,43 @@ function BlogBoard() {
             })
     }
 
-    const toggleEdit = () => {
+    const toggleEdit = async () => {
         if (isEditing) {
-            if (selectedContent === 'text') {
-                setBlog(editContent)
-            } else if (selectedContent === 'html') {
-                setHtml(editContent)
-            } else if (selectedContent === 'jsx') {
-                setJsx(editContent)
+            try {
+                setLoading(true)
+                let updatedBlog = { ...blog }
+
+                if (selectedContent === 'text') {
+                    updatedBlog.blog = editContent
+                } else if (selectedContent === 'html') {
+                    setHtml(editContent)
+                } else if (selectedContent === 'jsx') {
+                    setJsx(editContent)
+                }
+
+                const response = await fetch('http://127.0.0.1:8080/api/saveblog', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(updatedBlog)
+                });
+
+                if (response.ok) {
+                    const Response = await response.json()
+                    setBlog(updatedBlog)
+                    setContent(editContent)
+                    setHasTyped(false)
+                } else {
+                    const errorResponse = await response.json()
+                    triggerPopup('Failed to Save the Blog. Try Again')
+                }
+            } catch (error) {
+                triggerPopup('Failed due to Bad Connection. Try Again')
+            } finally {
+                setLoading(false)
             }
-            setContent(editContent)
         }
         setIsEditing(!isEditing)
     }
@@ -206,6 +249,7 @@ function BlogBoard() {
 
     return (
         <div className="h-full w-3/5 px-2 overflow-x-hidden bg-white rounded-2xl drop-shadow-md">
+            <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
             <h2 className="py-1 px-4 font-poppins font-semibold text-lg tracking-wide">Generated Blog</h2>
             <div className="relative w-full h-16">
                 <SwitchOutput selectedContent={selectedContent} onSelect={handleSelect} />

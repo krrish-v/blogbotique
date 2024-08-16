@@ -4,15 +4,26 @@ import NavBar from "../components/NavBar"
 import AddProject from "../components/AddProject"
 import Loading from "../components/loading"
 import { useAppContext } from "../contexts/AppContext"
+import { useAuthContext } from "../contexts/AuthContext"
+import LogIn from "./Login"
+import Popup from "../components/PopUp"
 
 function ProjectsPage() {
-    const { projects, setProjects } = useAppContext()
+    const { isAuthenticated } = useAuthContext()
+    const { projects, setProjects, setSelectedProject, setSummary, setTitles, setBlog } = useAppContext()
     const [NumOfProj, setNumOfProj] = useState(0)
     const [NumOfBlogs, setNumOfBlogs] = useState(0)
     const [fetchError, setFetchError] = useState(false)
     const [showAddProject, setShowAddProject] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const [showPopup, setShowPopup] = useState(false)
+    const [popupMessage, setPopupMessage] = useState('')
+
+    const triggerPopup = (message) => {
+        setPopupMessage(message)
+        setShowPopup(true)
+    }
 
     const handleHomeClick = () => {
         navigate('/')
@@ -44,11 +55,11 @@ function ProjectsPage() {
                 setNumOfProj(Response.projects.length)
                 setProjects(Response.projects)
             } else {
-                console.error(Response.message)
+                triggerPopup(Response.message)
                 setFetchError(true)
             }
         } catch (error) {
-            console.error('Error:', error)
+            triggerPopup('Error:', error)
             setFetchError(true)
         } finally {
             setLoading(false)
@@ -56,6 +67,7 @@ function ProjectsPage() {
     }
 
     useEffect(() => {
+        console.log("useEffect called")
         FetchProjects()
     }, [])
 
@@ -67,9 +79,20 @@ function ProjectsPage() {
         setShowAddProject(false)
     }
 
-    const OpenProject = () => {
-        navigate('/Dashboard')
+    const OpenProject = (projectName, projectId, summary) => {
+        setSelectedProject({ projectName, projectId })
+        setSummary(summary)
+        setTitles(null)
+        setBlog(prevState => ({
+            ...prevState,
+            blog: null
+        }))
+        setTimeout(() => {
+            navigate('/Dashboard')
+        }, 300)
     }
+
+    console.log(isAuthenticated)
 
     if (fetchError) {
         return (
@@ -86,8 +109,15 @@ function ProjectsPage() {
         )
     }
 
+    if (!isAuthenticated) {
+        return (
+            <LogIn />
+        )
+    }
+
     return (
         <div className="h-screen w-full">
+            <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
             <NavBar buttons={buttons} />
             {showAddProject && <AddProject closeAddProject={closeAddProject} />}
             {loading ? (
@@ -103,7 +133,7 @@ function ProjectsPage() {
                     <div className="px-10 md:px-28 w-full h-auto py-10 space-y-8 flex flex-wrap">
                         {projects.length > 0 ? (
                             projects.map((project) => (
-                                <button onClick={OpenProject}
+                                <button onClick={() => OpenProject(project.name, project.id, project.summary)}
                                     key={project.id}
                                     className="relative h-20 md:h-28 w-full border-2 border-custom-black rounded-xl flex flex-col justify-center hover:scale-95 transition-transform">
                                     <h1 className=" px-6 font-poppins font-semibold text-2xl tracking-wide">{project.name}</h1>

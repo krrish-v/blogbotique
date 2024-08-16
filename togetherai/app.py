@@ -15,14 +15,57 @@ client = Together(api_key="f8c8fa4fd70a01169d90a949a82246470d2d0e5620e80f026b4ea
 
 user_projects = {
     'projects': [
-        {'id': 1, 'name': 'Project A', 'description': 'Description for project A', 'company':'CompanyA', 'status':'12:30pm'},
-        {'id': 2, 'name': 'Project B', 'description': 'Description for project B', 'company':'CompanyB', 'status':'12:30pm'},
-        {'id': 3, 'name': 'Project C', 'description': 'Description for project C', 'company':'CompanyC', 'status':'12:30pm'},
-        {'id': 4, 'name': 'Project D', 'description': 'Description for project D', 'company':'CompanyD', 'status':'12:30pm'},
-        {'id': 5, 'name': 'Project E', 'description': 'Description for project E', 'company':'CompanyE', 'status':'12:30pm'},
-        {'id': 6, 'name': 'Project F', 'description': 'Description for project F', 'company':'CompanyF', 'status':'12:30pm'},
+        {'id': 1, 'name': 'Project A', 'description': 'Description for project A', 'company':'CompanyA', 'status':'12:30pm' ,'summary':"This test summary A for project A with company A"},
+        {'id': 2, 'name': 'Project B', 'description': 'Description for project B', 'company':'CompanyB', 'status':'12:30pm','summary':"This test summary B for project B with company B"},
+        {'id': 3, 'name': 'Project C', 'description': 'Description for project C', 'company':'CompanyC', 'status':'12:30pm','summary':"This test summary C for project C with company C"},
+        {'id': 4, 'name': 'Project D', 'description': 'Description for project D', 'company':'CompanyD', 'status':'12:30pm','summary':"This test summary D for project D with company D"},
+        {'id': 5, 'name': 'Project E', 'description': 'Description for project E', 'company':'CompanyE', 'status':'12:30pm','summary':"This test summary E for project E with company E"},
+        {'id': 6, 'name': 'Project F', 'description': 'Description for project F', 'company':'CompanyF', 'status':'12:30pm','summary':"This test summary F for project F with company F"},
     ]
 }
+
+project_blogs = [
+  {
+    'id': 1,
+    'title': "The Future of AI",
+    'blog': "Artificial Intelligence is rapidly evolving, influencing industries from healthcare to finance. With advancements in machine learning and natural language processing, AI is poised to transform how we live and work. However, ethical concerns and the need for regulation remain critical as we move forward."
+  },
+  {
+    'id': 2,
+    'title': "Sustainable Living",
+    'blog': "Sustainable living involves making choices that reduce our environmental impact. From minimizing waste to conserving energy, individuals can contribute to a healthier planet. Adopting renewable energy sources and supporting eco-friendly products are key steps in creating a sustainable future."
+  },
+  {
+    'id': 3,
+    'title': "The Power of Meditation",
+    'blog': "Meditation is a powerful practice that promotes mental clarity and emotional well-being. By focusing on the present moment, individuals can reduce stress, improve concentration, and enhance overall quality of life. Regular meditation can lead to profound personal growth and inner peace."
+  },
+  {
+    'id': 4,
+    'title': "Digital Marketing Trends",
+    'blog': "Digital marketing continues to evolve with new trends like AI-driven analytics, personalized content, and social media integration. Businesses must stay ahead by embracing these trends to reach their target audience effectively. Understanding customer behavior and leveraging data are essential for successful campaigns."
+  },
+  {
+    'id': 5,
+    'title': "The Importance of Sleep",
+    'blog': "Quality sleep is vital for overall health, impacting everything from cognitive function to immune system strength. Establishing a consistent sleep routine and creating a restful environment can improve sleep quality. Prioritizing sleep is essential for maintaining physical and mental well-being."
+  },
+  {
+    'id': 6,
+    'title': "The Rise of Remote Work",
+    'blog': "Remote work has become increasingly popular, offering flexibility and improved work-life balance. Companies are adapting to this trend by implementing remote-friendly policies and technologies. However, challenges such as maintaining productivity and team cohesion require careful management and innovative solutions."
+  },
+  {
+    'id': 7,
+    'title': "Healthy Eating Habits",
+    'blog': "Healthy eating habits are crucial for maintaining energy levels, mental clarity, and overall health. Incorporating a balanced diet with plenty of fruits, vegetables, and whole grains can improve well-being. Mindful eating and portion control are also important aspects of a healthy lifestyle."
+  },
+  {
+    'id': 8,
+    'title': "The Impact of Social Media",
+    'blog': "Social media has revolutionized how we communicate and share information. While it offers opportunities for connection and self-expression, it also presents challenges like misinformation and cyberbullying. Understanding the impact of social media on mental health and society is crucial for responsible usage."
+  }
+]
 
 @app.route('/upload/url', methods=['POST'])
 def index():
@@ -171,6 +214,23 @@ def ReturnUserProjects():
     projects = user_projects['projects']
     blogs = 12
     return jsonify({'status': 'success', 'projects': projects, 'blogsnumber': blogs}), 200
+
+@app.route('/api/getprojectsblogs')
+def ReturnBlogs():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'success', 'message': 'CORS preflight request handled successfully'}), 200
+    
+    return jsonify({'status': 'success','projectblogs': project_blogs}), 200
+    
+@app.route('/api/saveblog', methods=['OPTIONS', 'POST'])
+def SaveBlogs():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'success', 'message': 'CORS preflight request handled successfully'}), 200
+    
+    if request.method == 'POST':
+        data = request.json
+        print(data)
+        return jsonify({'status': 'success'}), 200
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)

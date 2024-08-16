@@ -28,9 +28,10 @@ const Keywords = ({ keywords }) => {
     }
 
     return (
-        <div className='relative mt-8 h-full w-full overflow-hidden'>
-            <h2 className="py-1 font-poppins font-semibold text-md tracking-wide">Keywords</h2>
-            <div className="flex flex-wrap gap-1 mt-2 max-h-20 overflow-y-auto scroll-container">
+        <div className='relative h-[80%] w-full overflow-hidden'>
+            <h2 className=" py-1 font-poppins font-semibold text-md tracking-wide">Add your content Description</h2>
+            <p className="font-poppins text-[12px] tracking-wide">Based on your description/keywords, our AI will generate suitable blog titles for you</p>
+            <div className="flex flex-wrap gap-1 mt-2 max-h-12 overflow-y-auto scroll-container">
                 {keywords && keywords.length > 0 ? (
                     keywords.map((keyword, index) => (
                         <button
@@ -54,7 +55,7 @@ const Keywords = ({ keywords }) => {
                     value={newKeyword}
                     onChange={(e) => setNewKeyword(e.target.value)}
                     className="border border-gray-300 rounded-lg px-4 py-1 pr-10 w-full placeholder-gray-500 focus:outline-none"
-                    placeholder="Add a new keyword"
+                    placeholder="Add a new description"
                 />
                 <button
                     onClick={handleAddKeyword}
