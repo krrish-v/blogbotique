@@ -25,7 +25,12 @@ export const AppProvider = ({ children }) => {
 
     const [blog, setBlog] = useState(() => {
         const savedBlog = sessionStorage.getItem('blog')
-        return savedBlog ? JSON.parse(savedBlog) : { blogId: '', ProjectName: '', blog: '' }
+        return savedBlog ? JSON.parse(savedBlog) : {
+            project_id: "",
+            titles: [],
+            data: {},
+            user_id: ""
+        }
     })
 
     const [html, setHtml] = useState(() => {
@@ -56,6 +61,11 @@ export const AppProvider = ({ children }) => {
     const [SelectedProject, setSelectedProject] = useState(() => {
         const savedSelectedProject = sessionStorage.getItem('SelectedProject')
         return savedSelectedProject ? JSON.parse(savedSelectedProject) : { projectName: '', projectId: '', summary }
+    })
+
+    const [SelectedBlogTitle, setSelectedBlogTitle] = useState(() => {
+        const savedSelectedProject = sessionStorage.getItem('SelectedProject')
+        return savedSelectedProject ? JSON.parse(savedSelectedProject) : {}
     })
 
     useEffect(() => {
@@ -102,6 +112,10 @@ export const AppProvider = ({ children }) => {
         sessionStorage.setItem('SelectedProject', JSON.stringify(SelectedProject))
     }, [SelectedProject])
 
+    useEffect(() => {
+        sessionStorage.setItem('SelectedBlogTitle', JSON.stringify(SelectedBlogTitle))
+    }, [SelectedBlogTitle])
+
     return (
         <AppContext.Provider value={{
             summary, setSummary,
@@ -114,7 +128,8 @@ export const AppProvider = ({ children }) => {
             tags, setTags,
             hasTyped, setHasTyped,
             projects, setProjects,
-            SelectedProject, setSelectedProject
+            SelectedProject, setSelectedProject,
+            SelectedBlogTitle, setSelectedBlogTitle
         }}>
             {children}
         </AppContext.Provider>

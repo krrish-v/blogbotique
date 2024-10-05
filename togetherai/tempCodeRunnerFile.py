@@ -1,1 +1,1 @@
-projectblogs
+/api/generateblog

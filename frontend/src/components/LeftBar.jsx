@@ -9,7 +9,7 @@ function LeftBar() {
     const [link, setLink] = useState("")
     const [file, setFile] = useState(null)
     const [loading, setLoading] = useState(false)
-    const { summary, setSummary, keywords, setKeywords, selectedKeywords, setTitles } = useAppContext()
+    const { summary, setSummary, keywords, setKeywords, selectedKeywords, setTitles, SelectedProject } = useAppContext()
     const [showPopup, setShowPopup] = useState(false)
     const [popupMessage, setPopupMessage] = useState('')
 
@@ -17,6 +17,7 @@ function LeftBar() {
         setPopupMessage(message)
         setShowPopup(true)
     }
+
 
     const GenerateSummary = async (event) => {
         event.preventDefault()
@@ -28,20 +29,25 @@ function LeftBar() {
 
         setLoading(true)
 
-        const formData = new FormData()
-
-        if (file) {
-            formData.append('file', file)
-        } else if (link) {
-            formData.append('link', link)
-        }
+        // const formData = new FormData()
+        // formData.append('project_id', SelectedProject.projectId)
+        // formData.append('link', link)
+        // console.log(formData)
+        // if (file) {
+        //     formData.append('file', file)
+        // } else if (link) {
+        //     formData.append('link', link)
+        // }
 
         try {
-            const response = await fetch('https://nervous-zebra-54.telebit.io/upload/url', {
+            const response = await fetch('https://tender-snake-4.telebit.io/projects/upload/url', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 credentials: 'include',
-                body: formData,
-            });
+                body: JSON.stringify({ project_id: SelectedProject.projectId, link: link }),
+            })
 
             if (response.ok) {
                 const Response = await response.json()
@@ -65,18 +71,19 @@ function LeftBar() {
         event.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/generatetitles', {
+            const response = await fetch('https://tender-snake-4.telebit.io/projects/api/generatetitles', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include',
-                body: JSON.stringify({ summary, selectedKeywords })
+                body: JSON.stringify({ project_id: SelectedProject.projectId, phrases: selectedKeywords })
             })
 
             if (response.ok) {
                 const Response = await response.json()
-                setTitles(Response.titles)
+                const titlesArray = Response.titles.flat()
+                setTitles(titlesArray)
+                console.log(titlesArray)
                 console.log(Response)
             } else {
                 const errorResponse = await response.json()
@@ -91,11 +98,13 @@ function LeftBar() {
         }
     }
 
+    console.log(summary)
+
     return (
         <div className="h-full w-[22.5%] bg-white rounded-r-3xl shadow-xl">
             <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
             <div className="relative flex flex-col justify-center w-full h-1/2 border-b-2 ">
-                {summary ? (
+                {summary && summary.trim() && summary !== "undefined" ? (
                     <Summary />
                 ) : (
                     <div>
@@ -118,9 +127,9 @@ function LeftBar() {
                                     className="border border-gray-300 rounded-lg px-4 py-1 w-full mt-1 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition duration-200 ease-in-out"
                                     placeholder="https://www.blogs.ai/"
                                 />
-                                <div className="my-1">or</div>
+                                {/* <div className="my-1">or</div> */}
                             </div>
-                            <label htmlFor="Docupload" className="font-poppins font-normal text-sm tracking-wide text-left">Add a pdf, doc or a txt file</label>
+                            {/* <label htmlFor="Docupload" className="font-poppins font-normal text-sm tracking-wide text-left">Add a pdf, doc or a txt file</label>
                             <div className="flex flex-col justify-center ">
                                 <label htmlFor="fileInput" className="mt-2 px-3 py-1 h-fit w-fit text-sm text-custom-black rounded-xl border-2 border-custom-gray hover:bg-custom-gray hover:text-white transition-colors">
                                     Choose File
@@ -136,9 +145,9 @@ function LeftBar() {
                                     }}
                                     className="hidden"
                                 />
-                            </div>
+                            </div> */}
                             <div className=" flex flex-col justify-center items-center">
-                                <button type="submit" className="mt-2 px-3 py-[2px] h-fit w-fit hover:text-custom-black rounded-xl border-2 hover:bg-custom-white border-custom-gray bg-custom-gray text-white transition-colors">Generate</button>
+                                <button type="submit" className="mt-10 px-3 py-[2px] h-fit w-fit hover:text-custom-black rounded-xl border-2 hover:bg-custom-white border-custom-gray bg-custom-gray text-white transition-colors">Generate</button>
                             </div>
                         </form>
                     </div>

@@ -6,7 +6,7 @@ function NavBar({ buttons }) {
 
     return (
         <div className="absolute z-10 min-w-[1000px] top-0 bg-white h-16 w-full rounded-b-xl drop-shadow-lg flex items-center justify-between px-10">
-            <h1 className="font-poppins font-semibold text-xl tracking-wide">Scribbs.AI</h1>
+            <h1 className="font-poppins font-semibold text-xl tracking-wide">Scribz</h1>
             <div className="flex justify-center items-center h-full space-x-5">
                 {buttons.map((button, index) => (
                     <button

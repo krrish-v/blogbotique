@@ -8,12 +8,13 @@ function SignUp() {
     const { login } = useAuthContext()
     const [formData, setFormData] = useState({
         name: '',
-        phone: '',
-        email: ''
+        phone_number: '',
+        email: '',
     })
+    const [token, setToken] = useState("")
     const [loading, setLoading] = useState(false)
     const [otpScreen, setOtpScreen] = useState(false)
-    const [otp, setOtp] = useState(["", "", "", ""])
+    const [otp, setOtp] = useState(["", "", "", "", "", ""])
     const navigate = useNavigate()
     const [showPopup, setShowPopup] = useState(false)
     const [popupMessage, setPopupMessage] = useState('')
@@ -42,17 +43,28 @@ function SignUp() {
             const newOtp = [...otp]
             newOtp[index] = value
             setOtp(newOtp)
-            if (value && index < 3) {
+            if (value && index < 5) {
                 document.getElementById(`otp-input-${index + 1}`).focus()
             }
         }
     }
 
+    // const generateToken = () => {
+    //     const combinedString = `${formData.name}${formData.phone_number}`
+    //     const generatedToken = combinedString
+    //     setToken(generatedToken)
+    //     setFormData(prevData => ({
+    //         ...prevData,
+    //         id: generatedToken
+    //     }))
+    // }
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         setLoading(true)
+        // generateToken()
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/authenticatedata', {
+            const response = await fetch('https://tender-snake-4.telebit.io/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,8 +73,17 @@ function SignUp() {
             })
 
             if (response.ok) {
-                setOtpScreen(true)
-                console.log('Authentication successful:', response)
+                Response = await response.json()
+                if (Response.User == false) {
+                    triggerPopup(Response.message)
+                } else {
+                    setOtpScreen(true)
+                    setTimeout(() => {
+                        triggerPopup(Response.message)
+                        console.log('Authentication successful:', Response.message)
+                        console.log(Response.User)
+                    }, 300)
+                }
             } else {
                 triggerPopup("Failed to Signup. Please try again!")
                 console.error('Authentication failed:', response.message)
@@ -80,18 +101,19 @@ function SignUp() {
         setLoading(true)
         const otpValue = otp.join("")
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/authenticateotp', {
+            const response = await fetch('https://tender-snake-4.telebit.io/otp/verify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ otp: otpValue })
+                body: JSON.stringify({ email: formData.email, code: otpValue })
             })
 
             if (response.ok) {
                 Response = await response.json()
                 console.log('Authentication successful:', Response)
-                login(Response.token)
+                login(Response.id)
+                console.log(Response.id)
                 setLoading(false)
                 navigate('/Welcome')
             } else {
@@ -131,11 +153,11 @@ function SignUp() {
     }
 
     return (
-        <div className="h-screen w-screen grid grid-cols-1 md:grid-cols-2 bg-custom-white">
+        <div className="h-svh w-screen grid grid-cols-1 md:grid-cols-2 bg-custom-white">
             <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
-            <div className="relative h-screen w-full flex justify-center items-center bg-custom-black">
+            <div className="relative h-svh w-full flex justify-center items-center bg-custom-black">
                 <h1 className="text-white font-poppins text-3xl font-bold">Create blogs like never before.</h1>
-                <h1 className="absolute bottom-8 right-10 text-white font-poppins text-2xl font-bold">Scribbs.ai</h1>
+                <h1 className="absolute bottom-8 right-10 text-white font-poppins text-2xl font-bold">Scribz</h1>
             </div>
             {loading ? (
                 <div className="w-full h-auto flex flex-col justify-center overflow-hidden">
@@ -147,8 +169,9 @@ function SignUp() {
                         <div className="relative h-full w-full py-16 px-5 md:px-10 lg:px-32 flex justify-center items-center">
                             <form onSubmit={handleOtpSubmit} className="flex flex-col justify-center items-center h-full w-full space-y-4">
                                 <h2 className="text-custom-black font-poppins font-semibold text-lg">
-                                    Enter the Verification code sent to the number +91{formatPhoneNumber(formData.phone)}
+                                    Enter the Verification code sent to the {formData.email}
                                 </h2>
+                                {/* +91{formatPhoneNumber(formData.phone)} */}
                                 <div className="flex justify-center space-x-2">
                                     {otp.map((_, index) => (
                                         <input
@@ -205,7 +228,7 @@ function SignUp() {
                                 <input
                                     type="email"
                                     name="email"
-                                    placeholder="scribbs.ai@email.com"
+                                    placeholder="Scribz@email.com"
                                     className="px-3 py-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-custom-blue"
                                     value={formData.email}
                                     onChange={handleChange}

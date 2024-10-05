@@ -16,25 +16,41 @@ function AddProject({ closeAddProject }) {
         setShowPopup(true)
     }
 
+    const generateProjectID = (company, projectName) => {
+        let combinedString = company + projectName
+
+        combinedString = combinedString.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+
+        if (combinedString.length > 8) {
+            return combinedString.substring(0, 8)
+        } else {
+            return combinedString.padEnd(8, 'X')
+        }
+    }
+
     const addtoMyproj = async (event) => {
         event.preventDefault()
         const token = localStorage.getItem('authToken')
+        const Pid = generateProjectID(company, projectName)
+        const formData = { id: token, project: projectName, company: company, project_id: Pid }
+        console.log(formData)
         setLoading(true)
         try {
-            const response = await fetch('http://localhost:8080/api/addproject', {
+            const response = await fetch('https://tender-snake-4.telebit.io/projects/create', {
                 method: 'POST',
                 headers: {
-                    'x-access-token': token
+                    'Content-Type': 'application/json'
                 },
-                credentials: 'include',
-                body: JSON.stringify({ projectName, company })
+                body: JSON.stringify(formData)
             })
             if (response.ok) {
                 const Response = await response.json()
-                setNumOfBlogs(Response.blogsnumber)
-                setNumOfProj(Response.projects.length)
-                setProjects(Response.projects)
+                console.log(Response)
+                // setNumOfBlogs(Response.blogsnumber)
+                // setNumOfProj(Response.projects.length)
+                // setProjects(Response.projects)
                 closeAddProject()
+                window.location.reload()
             } else {
                 console.error(Response.message)
                 triggerPopup("Failed to add the project! Please try again")

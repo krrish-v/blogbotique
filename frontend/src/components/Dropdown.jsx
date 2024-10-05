@@ -30,9 +30,9 @@ const Dropdown = () => {
             <div>
                 <button
                     onClick={handleToggle}
-                    className="inline-flex group justify-center items-center w-12 h-12 rounded-full border border-gray-300 shadow-sm px-4 bg-sky-600 hover:bg-sky-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex group justify-center items-center w-12 h-12 p-1 rounded-full border border-gray-300 shadow-sm bg-sky-600 hover:bg-sky-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    <h1 className='text-xl font-semibold font-poppins group-hover:text-custom-gray text-custom-white'>P</h1>
+                    <img src={'/Profile.png'} className=' w-full h-full rounded-full'></img>
                 </button>
             </div>
 
@@ -40,18 +40,18 @@ const Dropdown = () => {
                 <div className="origin-top-right absolute right-0 z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <button
-                            onClick={() => handleNavigate('/')}
+                            onClick={() => handleNavigate('/MyProjects')}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                             role="menuitem"
                         >
                             Home
                         </button>
                         <button
-                            onClick={() => handleNavigate('/MyProjects')}
+                            onClick={() => handleNavigate('/')}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                             role="menuitem"
                         >
-                            My Projects
+                            Landing Page
                         </button>
                         <button
                             onClick={() => handleNavigate('/MyAccount')}
