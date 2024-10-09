@@ -18,7 +18,6 @@ function LeftBar() {
         setShowPopup(true)
     }
 
-
     const GenerateSummary = async (event) => {
         event.preventDefault()
 
@@ -52,7 +51,7 @@ function LeftBar() {
             if (response.ok) {
                 const Response = await response.json()
                 console.log(Response)
-                setSummary(Response.summary || "Generated summary here.")
+                setSummary(Response.summary || "Our AI model has collected all the context from the upload.")
                 setKeywords(Response.keywords || [])
             } else {
                 const errorResponse = await response.json()
