@@ -90,6 +90,7 @@ function ProjectsPage() {
 
     useEffect(() => {
         FetchProjects()
+        console.log("fetching")
     }, [])
 
     const toggleAddProject = () => {
