@@ -1,38 +1,81 @@
-# blogbotique
-Presonalized AI blog generation
+# Scribz
+Personalized AI blog generation
 
-## Example usage
+## Command Usage Guide on Linux
 
-```python
-from workflow import Backend
-import json
+1. `git clone https://github.com/krrish-v/scribz`
 
-# Create an instance of the Backend class
-backend = Backend()
+### Install the Requirements
 
-index = None
-# Define the URL you want to crawl
-url = "https://focusedunow.com/"  # Replace with the actual URL
-
-# Get keywords from the URL
-keywords_json_string = backend.get_keywords(url)
-
-index = backend.index_manager
-
-print(keywords_json_string)  # This will print a JSON string containing the extracted keywords
-
-# Parse the JSON string into a Python dictionary
-keywords_json = json.loads(keywords_json_string)
-
-keyword__ = keywords_json['keywords']
-
-
-# Get blog titles based on the extracted keywords
-titles = backend.get_titles(keyword__, index)
-print(titles)  # This will print a list of generated blog titles
-
-custom = ''
-
-blog = backend.get_blog(titles[2], custom, ['education', 'studies'], index)
-print(blog)
+Run the command one by one
 ```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+source ~/.nvm/nvm.sh
+
+nvm install 16.16.0
+
+nvm use 16.16.0
+
+nvm alias default 16.16.0
+
+curl -fsSL https://nodejs.org/dist/v16.16.0/node-v16.16.0-linux-x64.tar.xz -o node-v16.16.0-linux-x64.tar.xz
+
+tar -xf node-v16.16.0-linux-x64.tar.xz
+
+sudo mv node-v16.16.0-linux-x64 /usr/local/node
+
+sudo ln -s /usr/local/node/bin/node /usr/bin/node
+
+sudo ln -s /usr/local/node/bin/npm /usr/bin/npm
+
+node -v
+
+npm -v
+```
+
+```
+pip install -r requirements.txt
+```
+
+### Requirements for Frontend
+
+`cd scribz/Frontend`
+Run one by one
+```
+npm install
+npm install vite
+npm install file-saver
+npm install docx
+```
+
+If required
+```
+npm audit
+npm audit fix
+```
+For details
+`npm fund`
+
+### Run Frontend
+`sudo npm run dev`
+
+### Requirements for Backend
+
+1. Install MongoDB and run on localhost with this command
+`sudo systemctl start mongod`
+2. Create a Database named `user_database` and a collection named `users_datausers_data`
+3. Create a Gemini API and paste it in a `scribz/Backend/.env` on a place of `GOOGLE_API_KEY=`
+
+### Run Backend
+`python3 app.py`
+
+======================================================================================
+
+Visit `http://localhost:5173` on your web browser
+
+
+
+## THANK YOU
+
+
