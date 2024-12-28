@@ -63,7 +63,7 @@ For details
 1. Install MongoDB and run on localhost with this command
 `sudo systemctl start mongod`
 2. Create a Database named `user_database` and a collection named `users_datausers_data`
-3. Create a Gemini API and paste it in a `scribz/Backend/.env` on a place of `GOOGLE_API_KEY=`
+3. Create a Gemini API and paste it in a `scribz/Backend/.env` as `GOOGLE_API_KEY=<api_key>`
 4. Now, go ahead to https://fastmail.com and create your new email. After that, go to Settings > Privacy & Security > Integrations > New App Password. Then, set the access to SMTP, and save the app password.
 5. In your `scribz/Backend/.env` file, enter the following code:
 ```
