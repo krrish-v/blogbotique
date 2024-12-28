@@ -65,7 +65,7 @@ For details
 2. Create a Database named `user_database` and a collection named `users_datausers_data`
 3. Create a Gemini API and paste it in a `scribz/Backend/.env` on a place of `GOOGLE_API_KEY=`
 4. Now, go ahead to https://fastmail.com and create your new email. After that, go to Settings > Privacy & Security > Integrations > New App Password. Then, set the access to SMTP, and save the app password.
-5. In your .env file, enter the following code:
+5. In your `scribz/Backend/.env` file, enter the following code:
 ```
 MAIL_USERNAME=<name>@fastmail.com
 MAIL_PASSWORD=<your_password>
