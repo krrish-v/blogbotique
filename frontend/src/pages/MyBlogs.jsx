@@ -88,13 +88,13 @@ function MyBlogs() {
     // {
     //     "project_id": "", "titles": [], "data": { }, "user_id": "")
     //     { "<title1>": { "initial": "<blog1>", "<enhance_prompt>": "<blog2>"....}, "<title2>": { "initial": "<blog1>", "<enhance_prompt>": "<blog2>".....}.....}
-    // https://tender-snake-4.telebit.io/
+    // http://127.0.0.1:8000/
 
 
     const FetchBlogs = async () => {
         const token = localStorage.getItem('authToken')
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/projects/saved/allblogs', {
+            const response = await fetch('http://127.0.0.1:8000/projects/saved/allblogs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -36,7 +36,7 @@ function AddProject({ closeAddProject }) {
         console.log(formData)
         setLoading(true)
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/projects/create', {
+            const response = await fetch('http://127.0.0.1:8000/projects/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -55,7 +55,7 @@ function BlogBoard() {
     //             if (!html) {
     //                 setLoading(true)
     //                 try {
-    //                     const response = await fetch("https://tender-snake-4.telebit.io/api/getcode", {
+    //                     const response = await fetch("http://127.0.0.1:8000/api/getcode", {
     //                         method: 'POST',
     //                         headers: {
     //                             'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ function BlogBoard() {
     //             if (!jsx) {
     //                 setLoading(true)
     //                 try {
-    //                     const response = await fetch("https://tender-snake-4.telebit.io/api/getcode", {
+    //                     const response = await fetch("http://127.0.0.1:8000/api/getcode", {
     //                         method: 'POST',
     //                         headers: {
     //                             'Content-Type': 'application/json'
@@ -133,7 +133,7 @@ function BlogBoard() {
         event.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/projects/api/enhanceblog', {
+            const response = await fetch('http://127.0.0.1:8000/projects/api/enhanceblog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ function BlogBoard() {
         setLoading(true)
 
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/projects/blogs/save', {
+            const response = await fetch('http://127.0.0.1:8000/projects/blogs/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

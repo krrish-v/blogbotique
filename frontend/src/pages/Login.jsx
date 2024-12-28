@@ -59,7 +59,7 @@ function LogIn() {
         event.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/login', {
+            const response = await fetch('http://127.0.0.1:8000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ function LogIn() {
         setLoading(true)
         const otpValue = otp.join("")
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/otp/verify', {
+            const response = await fetch('http://127.0.0.1:8000/otp/verify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

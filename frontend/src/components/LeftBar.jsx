@@ -39,7 +39,7 @@ function LeftBar() {
         // }
 
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/projects/upload/url', {
+            const response = await fetch('http://127.0.0.1:8000/projects/upload/url', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ function LeftBar() {
         event.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io/projects/api/generatetitles', {
+            const response = await fetch('http://127.0.0.1:8000/projects/api/generatetitles', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

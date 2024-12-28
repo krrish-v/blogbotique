@@ -63,7 +63,7 @@ function TitleBar() {
 
         event.preventDefault()
         try {
-            const response = await fetch('https://tender-snake-4.telebit.io//projects/api/generateblog', {
+            const response = await fetch('http://127.0.0.1:8000//projects/api/generateblog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
