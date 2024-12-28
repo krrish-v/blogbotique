@@ -1,6 +1,10 @@
 # Scribz
 Personalized AI blog generation
 
+![alt text](https://github.com/krrish-v/scribz/blob/main/img/Screenshot%20from%202024-12-28%2022-26-19.png)
+
+
+
 ## Command Usage Guide on Linux
 `~ git clone https://github.com/krrish-v/scribz`
 ### Install the Requirements
