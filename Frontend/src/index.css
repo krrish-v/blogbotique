@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "tommy";
+  src: url("./assets/MADE TOMMY Regular_PERSONAL USE.otf") format("truetype");
+}
+
+.typing-wrapper {
+  display: inline-block;
+  white-space: pre-wrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.typing-effect {
+  display: inline;
+  white-space: pre-wrap;
+  overflow: hidden;
+  border-right: 2px solid #000;
+  animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    border-color: transparent;
+  }
+
+  50% {
+    border-color: black;
+  }
+}
+
+.scroll-container {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+input[type="file"].hidden {
+  display: none;
+}
