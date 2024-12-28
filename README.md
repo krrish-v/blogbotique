@@ -53,9 +53,10 @@ For details
 
 ### Requirements for Backend
 
-1. Install MongoDB and run on localhost with this command
+1. Install MongoDB and run on localhost with the command
 
-`~ sudo systemctl start mongod`
+    `~ sudo systemctl start mongod`
+
 3. Create a Database named `user_database` and a collection named `users_datausers_data`
 4. Create a Gemini API and paste it in a `scribz/Backend/.env` as `GOOGLE_API_KEY=<api_key>`
 5. Now, go ahead to https://fastmail.com and create your new email. After that, go to Settings > Privacy & Security > Integrations > New App Password. Then, set the access to SMTP, and save the app password.
