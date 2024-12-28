@@ -70,10 +70,7 @@ MAIL_PASSWORD=<your_password>
 
 ======================================================================================
 
-Visit `http://localhost:5173` on your web browser
+Now Visit `http://localhost:5173` on your web browser
 
 
-
-## THANK YOU
-
-
+## THANK YOU and BEST OF LUCK 🪷
