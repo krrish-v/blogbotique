@@ -2,9 +2,7 @@
 Personalized AI blog generation
 
 ## Command Usage Guide on Linux
-
-1. `git clone https://github.com/krrish-v/scribz`
-
+`git clone https://github.com/krrish-v/scribz`
 ### Install the Requirements
 
 Run the command one by one
